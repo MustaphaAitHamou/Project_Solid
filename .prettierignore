@@ -1,0 +1,6 @@
+dist/
+node_modules/
+public/originaux/
+tests/fidelite/references/
+tests/e2e/references/
+package-lock.json

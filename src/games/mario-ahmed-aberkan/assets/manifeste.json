@@ -1,0 +1,365 @@
+{
+  "description": "Ressources originales du jeu Java MarioJava (src/images et src/audio), copiées sans aucune modification.",
+  "depot": "https://github.com/MustaphaAitHamou/MarioJava",
+  "dossierPublic": "/originaux/mario-ahmed-aberkan",
+  "ressources": [
+    {
+      "nom": "bloc",
+      "type": "image",
+      "fichier": "images/bloc.png",
+      "original": "src/images/bloc.png",
+      "octets": 2579,
+      "sha256": "922fd6921c427f3f5d4215a3686eb99e66d910137f53f4bd79d2d0b78474324c",
+      "largeur": 30,
+      "hauteur": 30
+    },
+    {
+      "nom": "boom",
+      "type": "image",
+      "fichier": "images/boom.png",
+      "original": "src/images/boom.png",
+      "octets": 2256,
+      "sha256": "1c8c23693a23786ae20e8faf75ca497459992febac2afc4d6959110d60741ab2",
+      "largeur": 63,
+      "hauteur": 50
+    },
+    {
+      "nom": "champArretDroite",
+      "type": "image",
+      "fichier": "images/champArretDroite.png",
+      "original": "src/images/champArretDroite.png",
+      "octets": 1414,
+      "sha256": "24f7c855972b0485ac2563a6b6276bffeae6e46c7459cb3137a160f0082209bb",
+      "largeur": 27,
+      "hauteur": 30
+    },
+    {
+      "nom": "champArretGauche",
+      "type": "image",
+      "fichier": "images/champArretGauche.png",
+      "original": "src/images/champArretGauche.png",
+      "octets": 1416,
+      "sha256": "7657cf2928e5a44b2a33ab727a3b8ea9d00fda4593d4e54badbafdbe28da9392",
+      "largeur": 27,
+      "hauteur": 30
+    },
+    {
+      "nom": "champEcraseDroite",
+      "type": "image",
+      "fichier": "images/champEcraseDroite.png",
+      "original": "src/images/champEcraseDroite.png",
+      "octets": 1147,
+      "sha256": "de02549ab53b17db1cc1e020f140e8e53a3a33a46ce4f8920e97a11764e5b3b9",
+      "largeur": 35,
+      "hauteur": 10
+    },
+    {
+      "nom": "champEcraseGauche",
+      "type": "image",
+      "fichier": "images/champEcraseGauche.png",
+      "original": "src/images/champEcraseGauche.png",
+      "octets": 1148,
+      "sha256": "fea64e17b0e24b8e77b742720cd8119bb39018724c95e00db09ae283b73810fe",
+      "largeur": 35,
+      "hauteur": 10
+    },
+    {
+      "nom": "champMarcheDroite",
+      "type": "image",
+      "fichier": "images/champMarcheDroite.png",
+      "original": "src/images/champMarcheDroite.png",
+      "octets": 1509,
+      "sha256": "34c77ebde96dc1acc29b1d769e02f0d8df89b65f6156586f6c5a03a8406fb786",
+      "largeur": 27,
+      "hauteur": 30
+    },
+    {
+      "nom": "champMarcheGauche",
+      "type": "image",
+      "fichier": "images/champMarcheGauche.png",
+      "original": "src/images/champMarcheGauche.png",
+      "octets": 1511,
+      "sha256": "a851b3cb0cd88225bfbb10bb13bd02b058cb8827cb8e37df366da40d46d0b034",
+      "largeur": 27,
+      "hauteur": 30
+    },
+    {
+      "nom": "chateau1",
+      "type": "image",
+      "fichier": "images/chateau1.png",
+      "original": "src/images/chateau1.png",
+      "octets": 16034,
+      "sha256": "59b76f92fc5f4f079f8ef6b8251b5493d734c9ee73d9fdd3f8e215e3f939a1d1",
+      "largeur": 172,
+      "hauteur": 200
+    },
+    {
+      "nom": "chateauFin",
+      "type": "image",
+      "fichier": "images/chateauFin.png",
+      "original": "src/images/chateauFin.png",
+      "octets": 7404,
+      "sha256": "aa4027402ae6b75610011feac3d5eddbb66ead66e2c53401870a4f8bb8e2d0cb",
+      "largeur": 124,
+      "hauteur": 150
+    },
+    {
+      "nom": "depart",
+      "type": "image",
+      "fichier": "images/depart.png",
+      "original": "src/images/depart.png",
+      "octets": 1754,
+      "sha256": "292d68323194b8c6348ba9493ac40b5e4ef63dcb78eff3a1117d8ac275d4a7f0",
+      "largeur": 50,
+      "hauteur": 60
+    },
+    {
+      "nom": "drapeau",
+      "type": "image",
+      "fichier": "images/drapeau.png",
+      "original": "src/images/drapeau.png",
+      "octets": 1946,
+      "sha256": "183e98e371d30bef8e45661850e72f9f379248eea1bee5da4cd19c3b0cd8d863",
+      "largeur": 49,
+      "hauteur": 180
+    },
+    {
+      "nom": "fondEcran",
+      "type": "image",
+      "fichier": "images/fondEcran.png",
+      "original": "src/images/fondEcran.png",
+      "octets": 199166,
+      "sha256": "699288376992a7b1374204c90c7ded5cae39433cf0eadbbb14899824d1aca374",
+      "largeur": 800,
+      "hauteur": 350
+    },
+    {
+      "nom": "marioArretDroite",
+      "type": "image",
+      "fichier": "images/marioArretDroite.png",
+      "original": "src/images/marioArretDroite.png",
+      "octets": 1696,
+      "sha256": "8a7d109bdab800d1ae381a81ee78d776346f9605d16f13d99d90c862281cb35b",
+      "largeur": 28,
+      "hauteur": 50
+    },
+    {
+      "nom": "marioArretGauche",
+      "type": "image",
+      "fichier": "images/marioArretGauche.png",
+      "original": "src/images/marioArretGauche.png",
+      "octets": 1692,
+      "sha256": "6584bd13ae8b613e105268bd83f5f263deeeffb34cb6aacec7034ed25c7925e8",
+      "largeur": 28,
+      "hauteur": 50
+    },
+    {
+      "nom": "marioMarcheDroite",
+      "type": "image",
+      "fichier": "images/marioMarcheDroite.png",
+      "original": "src/images/marioMarcheDroite.png",
+      "octets": 1799,
+      "sha256": "1bd3e92a54e9720d1f194b391ee59ded683d3cfc2a21f12eaa9ec5570409591f",
+      "largeur": 28,
+      "hauteur": 50
+    },
+    {
+      "nom": "marioMarcheGauche",
+      "type": "image",
+      "fichier": "images/marioMarcheGauche.png",
+      "original": "src/images/marioMarcheGauche.png",
+      "octets": 1797,
+      "sha256": "23333720f14024a91449ecd1adda2a778330a895da677555fc46494fd32caf12",
+      "largeur": 28,
+      "hauteur": 50
+    },
+    {
+      "nom": "marioMeurt",
+      "type": "image",
+      "fichier": "images/marioMeurt.png",
+      "original": "src/images/marioMeurt.png",
+      "octets": 1924,
+      "sha256": "e6a2b232afe0d5cbd7541aa58761b6ec703c6eeb38e950369ba32a0f4f90226a",
+      "largeur": 42,
+      "hauteur": 50
+    },
+    {
+      "nom": "marioSautDroite",
+      "type": "image",
+      "fichier": "images/marioSautDroite.png",
+      "original": "src/images/marioSautDroite.png",
+      "octets": 1968,
+      "sha256": "810125181ab5edd4c6e2e85ce08964f7dab5fa84c39a4a1ee0b5a18a988e2b3c",
+      "largeur": 29,
+      "hauteur": 54
+    },
+    {
+      "nom": "marioSautGauche",
+      "type": "image",
+      "fichier": "images/marioSautGauche.png",
+      "original": "src/images/marioSautGauche.png",
+      "octets": 1970,
+      "sha256": "75207dc487efd02e2a1319a8c44252a2a0f7b486c6df5c25fbd01f76b31ed351",
+      "largeur": 29,
+      "hauteur": 54
+    },
+    {
+      "nom": "piece1",
+      "type": "image",
+      "fichier": "images/piece1.png",
+      "original": "src/images/piece1.png",
+      "octets": 1367,
+      "sha256": "8e6781fdba72b2c34297b75ff26273edf46c6a3fd0899f21321931997fefb1a7",
+      "largeur": 25,
+      "hauteur": 30
+    },
+    {
+      "nom": "piece2",
+      "type": "image",
+      "fichier": "images/piece2.png",
+      "original": "src/images/piece2.png",
+      "octets": 1246,
+      "sha256": "9fb44702f9e65397faf647a43e713ae0d90b3e8506a928c9c8c4b19fe380a0ac",
+      "largeur": 23,
+      "hauteur": 27
+    },
+    {
+      "nom": "tortueArretDroite",
+      "type": "image",
+      "fichier": "images/tortueArretDroite.png",
+      "original": "src/images/tortueArretDroite.png",
+      "octets": 1970,
+      "sha256": "9c2b68a7f773dee6e98ae695defa019ba3b3d892913d75f365b379ff1a488081",
+      "largeur": 43,
+      "hauteur": 50
+    },
+    {
+      "nom": "tortueArretGauche",
+      "type": "image",
+      "fichier": "images/tortueArretGauche.png",
+      "original": "src/images/tortueArretGauche.png",
+      "octets": 1973,
+      "sha256": "626978e5e5ce9262ebe4ed8bf0e1f40edc064189e457b75202d138e1f88206ba",
+      "largeur": 43,
+      "hauteur": 50
+    },
+    {
+      "nom": "tortueFermee",
+      "type": "image",
+      "fichier": "images/tortueFermee.png",
+      "original": "src/images/tortueFermee.png",
+      "octets": 1302,
+      "sha256": "5883d05cc2dfa11e5a7a9bd4efb1b0e6198c18f080edd6e766881a69b06cf83f",
+      "largeur": 25,
+      "hauteur": 23
+    },
+    {
+      "nom": "tortueMarcheDroite",
+      "type": "image",
+      "fichier": "images/tortueMarcheDroite.png",
+      "original": "src/images/tortueMarcheDroite.png",
+      "octets": 1599,
+      "sha256": "7a087413b201f2dc89dc2491efa07cf2b4045acc81942979d2d5c1942b547a93",
+      "largeur": 43,
+      "hauteur": 50
+    },
+    {
+      "nom": "tortueMarcheGauche",
+      "type": "image",
+      "fichier": "images/tortueMarcheGauche.png",
+      "original": "src/images/tortueMarcheGauche.png",
+      "octets": 1600,
+      "sha256": "3c23328fac18ea0a67ef462c07f675d6e183f96abefd6a5a057073953ce2550c",
+      "largeur": 43,
+      "hauteur": 50
+    },
+    {
+      "nom": "tuyauRouge",
+      "type": "image",
+      "fichier": "images/tuyauRouge.png",
+      "original": "src/images/tuyauRouge.png",
+      "octets": 1991,
+      "sha256": "fb0c7546d1fdf776f4d5f2ad27d316648b7eb698a47f19f176a2e27d19834df5",
+      "largeur": 43,
+      "hauteur": 65
+    },
+    {
+      "nom": "boum",
+      "type": "son",
+      "fichier": "audio/boum.wav",
+      "original": "src/audio/boum.wav",
+      "octets": 61996,
+      "sha256": "46727eb2d89bbafd42cc8f43611041d12a219a28bc0e3b154d417dfd45e709ee",
+      "codec": "PCM",
+      "canaux": 1,
+      "frequence": 44100,
+      "bits": 16,
+      "duree": 0.702
+    },
+    {
+      "nom": "ecrasePersonnage",
+      "type": "son",
+      "fichier": "audio/ecrasePersonnage.wav",
+      "original": "src/audio/ecrasePersonnage.wav",
+      "octets": 2360,
+      "sha256": "55b55edd3778e7b95d38f37bbe4e7e7614c6ef7f1c89344ac86ab254cdcc48f0",
+      "codec": "PCM",
+      "canaux": 1,
+      "frequence": 11025,
+      "bits": 8,
+      "duree": 0.209
+    },
+    {
+      "nom": "partieGagnee",
+      "type": "son",
+      "fichier": "audio/partieGagnee.wav",
+      "original": "src/audio/partieGagnee.wav",
+      "octets": 1145690,
+      "sha256": "6f5cb2002c1be913565a5a3cf378107f409ae4faa84059db4e3eb93766a8d652",
+      "codec": "PCM",
+      "canaux": 2,
+      "frequence": 44100,
+      "bits": 16,
+      "duree": 6.494
+    },
+    {
+      "nom": "partiePerdue",
+      "type": "son",
+      "fichier": "audio/partiePerdue.wav",
+      "original": "src/audio/partiePerdue.wav",
+      "octets": 292616,
+      "sha256": "a5efec02810a5acdca19c546f36fbf9f174a5ee8bc8d7869fa90996ccf39df87",
+      "codec": "PCM",
+      "canaux": 1,
+      "frequence": 22050,
+      "bits": 16,
+      "duree": 6.634
+    },
+    {
+      "nom": "piece",
+      "type": "son",
+      "fichier": "audio/piece.wav",
+      "original": "src/audio/piece.wav",
+      "octets": 193938,
+      "sha256": "888beb8291fed5bb7ac076de51f738bfa2819325e1bfe5a01a9cfd6ec97b312d",
+      "codec": "PCM",
+      "canaux": 2,
+      "frequence": 44100,
+      "bits": 16,
+      "duree": 1.099
+    },
+    {
+      "nom": "saut",
+      "type": "son",
+      "fichier": "audio/saut.wav",
+      "original": "src/audio/saut.wav",
+      "octets": 2725,
+      "sha256": "81979d1da763c20985abdb996851c205603f28eed6ab0fd6f96c543c65dbcbb5",
+      "codec": "PCM",
+      "canaux": 1,
+      "frequence": 11025,
+      "bits": 8,
+      "duree": 0.243
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>KABYLE SOLIDE</title>
+    <meta
+      name="description"
+      content="KABYLE SOLIDE — jeux et services. Première version : le jeu Mario Ahmed Aberkan, jouable dans le navigateur."
+    />
+    <meta name="theme-color" content="#0a0f1e" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body class="page-accueil">
+    <!-- @inclure entete -->
+    <main id="contenu">
+      <section class="ks-heros" aria-labelledby="titre-site">
+        <canvas class="ks-heros__3d" aria-hidden="true"></canvas>
+        <div class="ks-heros__contenu">
+          <p class="ks-surtitre">Jeux &amp; services</p>
+          <h1 id="titre-site">KABYLE<span>SOLIDE</span></h1>
+          <p class="ks-heros__texte">
+            Bienvenue sur la première version du site. Notre premier jeu, Mario Ahmed Aberkan, se joue directement dans
+            le navigateur, sans rien installer.
+          </p>
+          <div class="ks-heros__actions">
+            <a class="ks-bouton ks-bouton--principal" href="/jeux/mario-ahmed-aberkan">▶ Jouer à Mario Ahmed Aberkan</a>
+            <a class="ks-bouton" href="#jeux">Voir les jeux</a>
+          </div>
+        </div>
+      </section>
+
+      <section id="jeux" class="ks-section" aria-labelledby="titre-jeux">
+        <h2 id="titre-jeux">Jeux</h2>
+        <ul class="ks-cartes" data-catalogue>
+          <li class="ks-carte">
+            <div class="ks-carte__corps">
+              <h3 class="ks-carte__titre">Mario Ahmed Aberkan</h3>
+              <p class="ks-carte__description">Le jeu de plateforme d’origine, porté de Java vers le Web.</p>
+              <div class="ks-carte__pied">
+                <a class="ks-bouton ks-bouton--principal" href="/jeux/mario-ahmed-aberkan">▶ Jouer</a>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </section>
+    </main>
+    <!-- @inclure pied -->
+    <script type="module" src="/src/site/pages/accueil.ts"></script>
+  </body>
+</html>

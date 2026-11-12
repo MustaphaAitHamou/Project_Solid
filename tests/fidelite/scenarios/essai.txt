@@ -1,0 +1,7 @@
+ticks 1500
+capture 1 300
+10 appui DROITE
+290 relache DROITE
+300 appui ESPACE
+305 appui DROITE
+360 relache ESPACE

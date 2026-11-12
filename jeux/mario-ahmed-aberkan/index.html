@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Mario Ahmed Aberkan — KABYLE SOLIDE</title>
+    <meta
+      name="description"
+      content="Jouez à Mario Ahmed Aberkan dans votre navigateur : le jeu Java d’origine porté à l’identique."
+    />
+    <meta name="theme-color" content="#0a0f1e" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body class="page-jeu">
+    <!-- @inclure entete -->
+    <main id="contenu" class="ks-page-jeu">
+      <div class="ks-page-jeu__titre">
+        <h1>Mario Ahmed Aberkan</h1>
+        <a class="ks-lien-retour" href="/">← Accueil</a>
+      </div>
+      <div class="ks-page-jeu__zone" id="zone-jeu">
+        <noscript><p>Ce jeu nécessite JavaScript.</p></noscript>
+      </div>
+      <div class="ks-page-jeu__actions">
+        <button type="button" class="ks-bouton ks-bouton--principal" id="bouton-partie" disabled>Commencer</button>
+        <button type="button" class="ks-bouton" id="bouton-plein-ecran" aria-pressed="false" disabled>
+          Plein écran
+        </button>
+        <a class="ks-bouton ks-bouton--discret" href="/">Retour à l’accueil</a>
+      </div>
+      <p class="ks-page-jeu__aide">
+        <kbd>←</kbd> <kbd>→</kbd> se déplacer · <kbd>Espace</kbd> sauter. Ramassez les 10 pièces et atteignez l’arrivée
+        avant la fin du temps.
+      </p>
+    </main>
+    <!-- @inclure pied -->
+    <script type="module" src="/src/site/pages/jeu-mario-ahmed-aberkan.ts"></script>
+  </body>
+</html>

@@ -1,0 +1,30 @@
+{
+  "name": "kabyle-solide",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Site KABYLE SOLIDE (Three.js) et portage Web fidèle du jeu Java « Mario Ahmed Aberkan ».",
+  "type": "module",
+  "engines": {
+    "node": ">=20.19"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build && node scripts/verifier-assets.mjs dist",
+    "preview": "vite preview",
+    "check": "tsc --noEmit",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "verify:assets": "node scripts/verifier-assets.mjs"
+  },
+  "dependencies": {
+    "three": "0.187.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "@types/node": "22.20.5",
+    "@types/three": "0.187.0",
+    "typescript": "7.0.2",
+    "vite": "8.3.6",
+    "vitest": "5.1.0"
+  }
+}

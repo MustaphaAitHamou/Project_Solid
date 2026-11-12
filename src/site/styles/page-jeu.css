@@ -1,0 +1,108 @@
+/* Page d'un jeu : la surface de jeu occupe la plus grande place possible sans défilement. */
+.ks-page-jeu {
+  --hauteur-reservee: 290px; /* en-tête + titre + boutons + aide */
+  width: 100%;
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 16px max(16px, env(safe-area-inset-right)) 24px max(16px, env(safe-area-inset-left));
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+  background: radial-gradient(900px 400px at 50% 0%, rgb(79 141 245 / 0.12), transparent 70%);
+}
+.ks-page-jeu__titre {
+  width: min(100%, max(300px, calc((100dvh - var(--hauteur-reservee)) * 2)));
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+}
+.ks-page-jeu__titre h1 {
+  margin: 0;
+  font-size: clamp(1.35rem, 3vw, 2rem);
+  letter-spacing: 0.01em;
+}
+.ks-lien-retour {
+  color: var(--ks-texte-doux);
+  text-decoration: none;
+  font-weight: 600;
+}
+.ks-lien-retour:hover {
+  color: var(--ks-texte);
+}
+.ks-page-jeu__zone {
+  width: min(100%, max(300px, calc((100dvh - var(--hauteur-reservee)) * 2)));
+}
+.ks-page-jeu__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+.ks-page-jeu__aide {
+  margin: 0;
+  max-width: 48em;
+  color: var(--ks-texte-doux);
+  font-size: 14px;
+  text-align: center;
+}
+.ks-page-jeu__aide kbd {
+  display: inline-block;
+  padding: 0 0.4em;
+  border: 1px solid var(--ks-bordure);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  font: inherit;
+  color: var(--ks-texte);
+}
+
+/* Téléphone en paysage : priorité absolue à la surface de jeu */
+@media (orientation: landscape) and (max-height: 540px) {
+  .page-jeu .ks-entete,
+  .page-jeu .ks-pied,
+  .ks-page-jeu__aide {
+    display: none;
+  }
+  .ks-page-jeu {
+    --hauteur-reservee: 64px;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    padding-block: 8px;
+    gap: 8px 12px;
+  }
+  .ks-page-jeu__titre {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+  .ks-page-jeu__titre h1 {
+    font-size: 1.05rem;
+  }
+  .ks-page-jeu__zone {
+    grid-column: 1;
+    justify-self: center;
+  }
+  .ks-page-jeu__actions {
+    grid-column: 2;
+    flex-direction: column;
+  }
+  .ks-page-jeu__actions .ks-bouton {
+    min-height: 40px;
+    padding: 8px 14px;
+    font-size: 14px;
+  }
+}
+
+/* Téléphone en portrait : le jeu prend toute la largeur */
+@media (max-width: 600px) and (orientation: portrait) {
+  .ks-page-jeu {
+    padding-inline: 8px;
+  }
+  .ks-page-jeu__titre,
+  .ks-page-jeu__zone {
+    width: 100%;
+  }
+  .ks-page-jeu__titre {
+    padding-inline: 8px;
+  }
+}

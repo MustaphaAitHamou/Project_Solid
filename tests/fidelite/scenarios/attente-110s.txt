@@ -1,0 +1,2 @@
+# Aucune entrée : les ennemis se déplacent seuls, le compte à rebours passe sous zéro
+ticks 34800

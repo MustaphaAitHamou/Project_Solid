@@ -1,0 +1,243 @@
+/* Module de jeu « Mario Ahmed Aberkan » : indépendant du style du site. */
+.ks-mario {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ks-mario__cadre {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 2 / 1; /* surface de jeu 700 × 350 */
+  background: #000;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow:
+    0 0 0 1px rgb(255 255 255 / 0.08),
+    0 18px 50px rgb(0 0 0 / 0.45);
+}
+
+.ks-mario:focus-visible .ks-mario__cadre {
+  outline: 2px solid rgb(255 213 74 / 0.55);
+  outline-offset: 3px;
+}
+
+.ks-mario__ecran {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* Voile : chargement, bouton « Commencer », erreur */
+.ks-mario__voile {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 14px;
+  padding: 16px;
+  background: rgb(8 12 24 / 0.55);
+  color: #fff;
+  text-align: center;
+  font:
+    500 clamp(14px, 2.2vw, 18px) / 1.4 system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
+}
+.ks-mario__voile[hidden] {
+  display: none;
+}
+.ks-mario__message {
+  margin: 0;
+  max-width: 34em;
+  text-shadow: 0 1px 2px rgb(0 0 0 / 0.6);
+}
+.ks-mario__voile progress {
+  width: min(260px, 60vw);
+  accent-color: #ffd54a;
+}
+.ks-mario__aide {
+  margin: 0;
+  font-size: 0.85em;
+  opacity: 0.9;
+}
+.ks-mario__aide kbd {
+  display: inline-block;
+  min-width: 1.8em;
+  padding: 0.05em 0.4em;
+  border: 1px solid rgb(255 255 255 / 0.5);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  font: inherit;
+}
+
+.ks-mario__commencer,
+.ks-mario__rejouer {
+  appearance: none;
+  border: 0;
+  border-radius: 999px;
+  background: #ffd54a;
+  color: #1a1400;
+  font:
+    700 clamp(16px, 2.6vw, 22px) / 1 system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
+  padding: 0.75em 1.6em;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgb(0 0 0 / 0.35);
+  transition: transform 0.12s ease;
+}
+.ks-mario__commencer:hover,
+.ks-mario__rejouer:hover {
+  transform: translateY(-1px) scale(1.03);
+}
+.ks-mario__commencer:focus-visible,
+.ks-mario__rejouer:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 3px;
+}
+
+/* « Rejouer » en bas du jeu, sans masquer le message de fin du Java (au centre) */
+.ks-mario__rejouer {
+  position: absolute;
+  left: 50%;
+  bottom: 7%;
+  transform: translateX(-50%);
+  font-size: clamp(13px, 2vw, 18px);
+}
+.ks-mario__rejouer:hover {
+  transform: translateX(-50%) scale(1.04);
+}
+.ks-mario__rejouer[hidden] {
+  display: none;
+}
+
+/* Commandes tactiles : seulement sur écran tactile, pendant la partie */
+.ks-mario__tactile {
+  display: none;
+  width: 100%;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+}
+.ks-mario--tactile.ks-mario--actif .ks-mario__tactile {
+  display: flex;
+}
+.ks-mario__tactile-groupe {
+  display: flex;
+  gap: 14px;
+}
+.ks-mario__tactile-bouton {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  border: 2px solid rgb(255 255 255 / 0.4);
+  background: rgb(255 255 255 / 0.14);
+  color: #fff;
+  font:
+    700 26px/1 system-ui,
+    sans-serif;
+  touch-action: none;
+  -webkit-touch-callout: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.ks-mario__tactile-bouton--espace {
+  width: 92px;
+  height: 92px;
+  font-size: 20px;
+  background: rgb(255 213 74 / 0.28);
+  border-color: rgb(255 213 74 / 0.75);
+}
+.ks-mario__tactile-bouton.est-enfonce {
+  background: rgb(255 255 255 / 0.42);
+  transform: scale(0.96);
+}
+
+/* Paysage (mobile) et plein écran : commandes superposées aux coins du jeu */
+@media (orientation: landscape) {
+  .ks-mario--tactile .ks-mario__tactile {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 0 max(14px, env(safe-area-inset-right)) 12px max(14px, env(safe-area-inset-left));
+    pointer-events: none;
+  }
+  .ks-mario--tactile .ks-mario__tactile-bouton {
+    pointer-events: auto;
+    opacity: 0.8;
+  }
+}
+@media (orientation: landscape) and (max-height: 440px) {
+  .ks-mario__tactile-bouton {
+    width: 62px;
+    height: 62px;
+    font-size: 22px;
+  }
+  .ks-mario__tactile-bouton--espace {
+    width: 74px;
+    height: 74px;
+    font-size: 17px;
+  }
+}
+
+/* Plein écran (API) */
+.ks-mario:fullscreen {
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  gap: 0;
+  background: #000;
+}
+.ks-mario:fullscreen .ks-mario__cadre {
+  width: min(100vw, 200vh);
+  border-radius: 0;
+  box-shadow: none;
+}
+.ks-mario:-webkit-full-screen {
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  background: #000;
+}
+.ks-mario:-webkit-full-screen .ks-mario__cadre {
+  width: min(100vw, 200vh);
+  border-radius: 0;
+}
+
+/* Plein écran simulé (navigateurs sans API, ex. iPhone) */
+.ks-mario.ks-plein-ecran-simule {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  justify-content: center;
+  gap: 0;
+  background: #000;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+.ks-mario.ks-plein-ecran-simule .ks-mario__cadre {
+  width: min(100%, 200dvh);
+  border-radius: 0;
+}
+.ks-defilement-bloque,
+.ks-defilement-bloque body {
+  overflow: hidden;
+}
