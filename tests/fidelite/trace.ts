@@ -16,7 +16,7 @@ export interface Scenario {
 
 export function lireScenario(texte: string): Scenario {
   const sc: Scenario = { ticks: 0, captures: [], entrees: new Map() };
-  for (const brut of texte.split('\n')) {
+  for (const brut of texte.split(/\r?\n/)) {
     const ligne = brut.trim();
     if (!ligne || ligne.startsWith('#')) continue;
     const p = ligne.split(/\s+/);

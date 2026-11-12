@@ -72,7 +72,7 @@ export const sons = (page: Page): Promise<string[]> => page.evaluate(() => windo
 export function entreesScenario(nom: string): Entree[] {
   const texte = readFileSync(join(RACINE, 'tests/fidelite/scenarios', `${nom}.txt`), 'utf8');
   return texte
-    .split('\n')
+    .split(/\r?\n/)
     .map((l) => l.trim().split(/\s+/))
     .filter((p) => /^\d+$/.test(p[0]))
     .map((p) => [Number(p[0]), p[1] as Entree[1], p[2] as Entree[2]]);

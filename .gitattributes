@@ -1,0 +1,7 @@
+# Fins de ligne LF partout (les empreintes des tests de fidélité en dépendent)
+* text=auto eol=lf
+
+# Ressources originales et références de test : binaires, jamais modifiés par Git
+*.png binary
+*.wav binary
+*.br binary

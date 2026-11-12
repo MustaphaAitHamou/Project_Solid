@@ -21,7 +21,7 @@ const scenarios = readdirSync(join(dossier, 'scenarios'))
 
 function lireReference(nom: string): { tours: number; empreintes: string[] } {
   const lignes = readFileSync(join(dossier, 'references', `${nom}.empreintes`), 'utf8')
-    .split('\n')
+    .split(/\r?\n/)
     .filter((l) => l && !l.startsWith('#'));
   return { tours: Number(lignes[0].split(' ')[1]), empreintes: lignes.slice(1) };
 }
