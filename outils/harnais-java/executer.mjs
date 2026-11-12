@@ -1,16 +1,18 @@
 #!/usr/bin/env node
 /**
- * Harnais de référence Java : exécute le code ORIGINAL du jeu (dépôt MarioJava) sur les scénarios
+ * Harnais de référence Java : exécute le code ORIGINAL du jeu (dépôt Project_Dhmed) sur les scénarios
  * de tests/fidelite/scenarios et produit les références tests/fidelite/references.
  *
  * Seules modifications apportées à une COPIE des sources Java (le dépôt n'est jamais modifié) :
  *   - les Thread.start() de Scene (Chrono), CompteARebours, Champ et Tortue sont retirés :
  *     le harnais exécute lui-même ces boucles aux cadences mesurées (horloge déterministe) ;
- *   - Audio.playSound() journalise le son au lieu de le jouer.
+ *   - Audio.playSound() et Audio.stopSound() journalisent le son au lieu de le jouer / l'arrêter.
+ * Les sources sont ensuite toutes converties en UTF-8 (Scene.java est en UTF-8, les autres en
+ * Windows-1252, comme le précise la configuration Eclipse du projet) et compilées en UTF-8.
  * Toute la logique de jeu (collisions, sauts, animations, défilement…) est celle du Java d'origine.
  *
  * Prérequis : JDK 11+ (javac et java dans le PATH).
- * Usage : node outils/harnais-java/executer.mjs <chemin-du-depot-MarioJava> [scenario…]
+ * Usage : node outils/harnais-java/executer.mjs <chemin-du-depot-Project_Dhmed> [scenario…]
  */
 import { execFileSync, spawn } from 'node:child_process';
 import { createHash } from 'node:crypto';
@@ -39,7 +41,7 @@ export const TAILLE_BLOC = 100;
 
 const depot = process.argv[2] && resolve(process.argv[2]);
 if (!depot) {
-  console.error('Usage : node outils/harnais-java/executer.mjs <chemin-du-depot-MarioJava> [scenario…]');
+  console.error('Usage : node outils/harnais-java/executer.mjs <chemin-du-depot-Project_Dhmed> [scenario…]');
   process.exit(2);
 }
 const choisis = process.argv.slice(3);
@@ -47,10 +49,13 @@ const choisis = process.argv.slice(3);
 // 1) Copie des sources et correctifs minimaux (octets préservés : les sources sont en Windows-1252)
 const travail = mkdtempSync(join(tmpdir(), 'harnais-mario-'));
 cpSync(join(depot, 'src'), join(travail, 'src'), { recursive: true });
-function patcher(fichier, avant, apres) {
+function patcher(fichier, avant, apres, optionnel = false) {
   const chemin = join(travail, 'src/com/mosmos', fichier);
   const texte = readFileSync(chemin, 'latin1');
-  if (texte.split(avant).length !== 2) throw new Error(`Correctif introuvable dans ${fichier} : ${avant}`);
+  if (texte.split(avant).length !== 2) {
+    if (optionnel) return;
+    throw new Error(`Correctif introuvable dans ${fichier} : ${avant}`);
+  }
   writeFileSync(chemin, texte.replace(avant, apres), 'latin1');
 }
 patcher('jeu/Scene.java', 'chronoEcran.start();', '/* HARNAIS: chronoEcran.start(); */');
@@ -61,6 +66,12 @@ patcher(
   'audio/Audio.java',
   '\t\tAudio s = new Audio(son);\n\t\ts.play();',
   '\t\tjournal.add(son); // HARNAIS (au lieu de : new Audio(son).play())',
+);
+patcher(
+  'audio/Audio.java',
+  '\t\tAudio s = new Audio(son);\n\t\ts.arrete();',
+  '\t\tjournal.add("STOP " + son); // HARNAIS (au lieu de : new Audio(son).arrete())',
+  true,
 );
 patcher(
   'audio/Audio.java',
@@ -78,8 +89,21 @@ const lister = (d) => {
   }
 };
 lister(join(travail, 'src'));
+// Encodages mixtes : chaque fichier est converti en UTF-8 selon son encodage réel
+const utf8Strict = new TextDecoder('utf-8', { fatal: true });
+const cp1252 = new TextDecoder('windows-1252');
+for (const f of sources) {
+  const octets = readFileSync(f);
+  let texte;
+  try {
+    texte = utf8Strict.decode(octets);
+  } catch {
+    texte = cp1252.decode(octets);
+  }
+  writeFileSync(f, texte, 'utf8');
+}
 lister(join(import.meta.dirname, 'harnais'));
-execFileSync('javac', ['-encoding', 'Cp1252', '-nowarn', '-d', classes, ...sources], { stdio: 'inherit' });
+execFileSync('javac', ['-encoding', 'UTF-8', '-nowarn', '-d', classes, ...sources], { stdio: 'inherit' });
 cpSync(join(depot, 'src/images'), join(classes, 'images'), { recursive: true });
 cpSync(join(depot, 'src/audio'), join(classes, 'audio'), { recursive: true });
 

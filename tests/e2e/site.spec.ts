@@ -31,12 +31,10 @@ test('2. la scène Three.js fonctionne (WebGL, rendu animé, pause hors écran)'
   const sans3d = await heros.screenshot();
   await canvas.evaluate((c) => (c.style.visibility = ''));
   const part = await differencePixels(page, avec3d, sans3d);
-  test
-    .info()
-    .annotations.push({
-      type: 'mesure',
-      description: `pixels dessinés par la scène 3D : ${(part * 100).toFixed(1)} %`,
-    });
+  test.info().annotations.push({
+    type: 'mesure',
+    description: `pixels dessinés par la scène 3D : ${(part * 100).toFixed(1)} %`,
+  });
   expect(part).toBeGreaterThan(0.03);
 
   // Animation : deux captures successives diffèrent

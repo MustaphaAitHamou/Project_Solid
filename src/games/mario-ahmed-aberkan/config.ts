@@ -62,22 +62,33 @@ export interface Corrections {
   retourDepuisLaFinDuNiveau: boolean;
   /**
    * Le thread du compte à rebours ne s'arrête jamais : le temps devient négatif et, 100 s après
-   * le lancement, « Vous avez gagné !! » se transforme en « Vous avez perdu... ».
+   * le lancement, le message de victoire « arwu cḍaḥ !! » se transforme en « Tqarseḍ akk ziɣ ».
    * Corrigé : le compte à rebours s'arrête dès que la partie est gagnée ou perdue.
    */
   compteAReboursFigeEnFinDePartie: boolean;
+  /**
+   * Musique de thème (Scene.finDePartie) : le même indicateur `ok` sert à lancer la musique et à
+   * jouer le son de victoire. La musique le consomme au premier tour, donc partieGagnee.wav n'est
+   * JAMAIS joué. Et Audio.stopSound() crée un nouveau Clip au lieu d'arrêter celui qui joue : la
+   * musique ne s'arrête jamais en fin de partie.
+   * Corrigé : la musique a son propre indicateur, elle s'arrête en fin de partie et le son de
+   * victoire est joué.
+   */
+  musiqueEtSonDeVictoire: boolean;
 }
 
 export const CORRECTIONS_PAR_DEFAUT: Corrections = {
   maintienDesTouches: true,
   retourDepuisLaFinDuNiveau: true,
   compteAReboursFigeEnFinDePartie: true,
+  musiqueEtSonDeVictoire: true,
 };
 
 export const AUCUNE_CORRECTION: Corrections = {
   maintienDesTouches: false,
   retourDepuisLaFinDuNiveau: false,
   compteAReboursFigeEnFinDePartie: false,
+  musiqueEtSonDeVictoire: false,
 };
 
 /** Au-delà de cet écart entre deux images (onglet en arrière-plan, gel), le jeu ne rattrape pas le temps. */

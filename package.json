@@ -1,7 +1,7 @@
 {
   "name": "kabyle-solide",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Site KABYLE SOLIDE (Three.js) et portage Web fidèle du jeu Java « Mario Ahmed Aberkan ».",
   "type": "module",
   "engines": {

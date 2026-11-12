@@ -45,8 +45,8 @@ for (const [type, sousDossier] of [
 
 const manifeste = {
   description:
-    'Ressources originales du jeu Java MarioJava (src/images et src/audio), copiées sans aucune modification.',
-  depot: 'https://github.com/MustaphaAitHamou/MarioJava',
+    'Ressources originales du jeu Java Project_Dhmed (« Super Ahmed Averkan Bros ») (src/images et src/audio), copiées sans aucune modification.',
+  depot: 'https://github.com/MustaphaAitHamou/Project_Dhmed',
   dossierPublic: `/${DOSSIER_ORIGINAUX}`,
   ressources: entrees,
 };

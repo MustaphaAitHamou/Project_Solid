@@ -1,0 +1,659 @@
+{
+ "description": "Parcours gagnant du mode Moderne (outils/moderne/planifier-victoire.ts)",
+ "segments": [
+  {
+   "pas": 96,
+   "gauche": false,
+   "droite": false,
+   "saut": false
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": false
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": false,
+   "saut": true
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": false,
+   "saut": true
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": false,
+   "saut": false
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": false
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": false,
+   "saut": true
+  },
+  {
+   "pas": 24,
+   "gauche": false,
+   "droite": true,
+   "saut": false
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 48,
+   "gauche": false,
+   "droite": true,
+   "saut": false
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 36,
+   "gauche": false,
+   "droite": true,
+   "saut": false
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 24,
+   "gauche": false,
+   "droite": true,
+   "saut": false
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 36,
+   "gauche": false,
+   "droite": true,
+   "saut": false
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": false,
+   "saut": false
+  },
+  {
+   "pas": 12,
+   "gauche": true,
+   "droite": false,
+   "saut": true
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": false
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 48,
+   "gauche": false,
+   "droite": true,
+   "saut": false
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 24,
+   "gauche": false,
+   "droite": true,
+   "saut": false
+  },
+  {
+   "pas": 12,
+   "gauche": true,
+   "droite": false,
+   "saut": false
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 24,
+   "gauche": false,
+   "droite": true,
+   "saut": false
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 24,
+   "gauche": false,
+   "droite": true,
+   "saut": false
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": false,
+   "saut": true
+  },
+  {
+   "pas": 24,
+   "gauche": false,
+   "droite": true,
+   "saut": false
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": false,
+   "saut": false
+  },
+  {
+   "pas": 36,
+   "gauche": false,
+   "droite": true,
+   "saut": false
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": false,
+   "saut": true
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 24,
+   "gauche": false,
+   "droite": true,
+   "saut": false
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": false,
+   "saut": false
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": false,
+   "saut": true
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 36,
+   "gauche": false,
+   "droite": true,
+   "saut": false
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": false
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": false,
+   "saut": false
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": false,
+   "saut": false
+  },
+  {
+   "pas": 60,
+   "gauche": false,
+   "droite": true,
+   "saut": false
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": false,
+   "saut": true
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 36,
+   "gauche": false,
+   "droite": true,
+   "saut": false
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": false,
+   "saut": true
+  },
+  {
+   "pas": 24,
+   "gauche": false,
+   "droite": true,
+   "saut": false
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 48,
+   "gauche": false,
+   "droite": true,
+   "saut": false
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 24,
+   "gauche": false,
+   "droite": true,
+   "saut": false
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": false,
+   "saut": true
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": false,
+   "saut": true
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": false,
+   "saut": true
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 24,
+   "gauche": false,
+   "droite": true,
+   "saut": false
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 24,
+   "gauche": false,
+   "droite": true,
+   "saut": false
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 36,
+   "gauche": false,
+   "droite": true,
+   "saut": false
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 36,
+   "gauche": false,
+   "droite": true,
+   "saut": false
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 24,
+   "gauche": false,
+   "droite": true,
+   "saut": false
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": false,
+   "saut": true
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 12,
+   "gauche": true,
+   "droite": false,
+   "saut": true
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": false,
+   "saut": true
+  },
+  {
+   "pas": 24,
+   "gauche": false,
+   "droite": false,
+   "saut": false
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": false,
+   "saut": true
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": false
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": false,
+   "saut": false
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 12,
+   "gauche": false,
+   "droite": true,
+   "saut": true
+  },
+  {
+   "pas": 24,
+   "gauche": false,
+   "droite": true,
+   "saut": false
+  }
+ ]
+}

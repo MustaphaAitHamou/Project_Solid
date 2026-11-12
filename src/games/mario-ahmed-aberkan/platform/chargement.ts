@@ -10,11 +10,17 @@ export interface RessourceImage {
 
 export interface RessourcesJeu {
   images: Map<NomImage, RessourceImage>;
+  /** sons légers, chargés avant le démarrage */
   sons: Map<CheminSon, ArrayBuffer>;
+  /** sons volumineux (musique, jingles de fin) chargés en arrière-plan */
+  sonsDifferes: Promise<{ son: CheminSon; octets: ArrayBuffer }>[];
   urlsSons: Map<CheminSon, string>;
   /** SHA-256 calculés dans le navigateur (si demandé) : fichier -> empreinte */
   empreintes: Map<string, string>;
 }
+
+/** Fichiers volumineux (≈15,7 Mo au total) : le jeu démarre sans les attendre. */
+export const SONS_DIFFERES = new Set(['audio/themeSong.wav', 'audio/partieGagnee.wav', 'audio/partiePerdue.wav']);
 
 export interface EntreeManifeste {
   nom: string;
@@ -66,30 +72,49 @@ async function decoderImage(
 }
 
 /**
- * Charge les 28 PNG et 6 WAV originaux listés dans le manifeste.
+ * Charge les 28 PNG et les 8 WAV originaux listés dans le manifeste (les 3 WAV volumineux en
+ * arrière-plan, voir SONS_DIFFERES).
  * En cas d'échec, une erreur explicite est levée : aucune ressource n'est jamais remplacée.
  */
 export async function chargerRessources(
   surProgression?: (chargees: number, total: number) => void,
   verifierEmpreintes = false,
 ): Promise<RessourcesJeu> {
-  const res: RessourcesJeu = { images: new Map(), sons: new Map(), urlsSons: new Map(), empreintes: new Map() };
-  const total = MANIFESTE.ressources.length;
+  const res: RessourcesJeu = {
+    images: new Map(),
+    sons: new Map(),
+    sonsDifferes: [],
+    urlsSons: new Map(),
+    empreintes: new Map(),
+  };
+  const lire = async (r: EntreeManifeste): Promise<ArrayBuffer> => {
+    const url = urlRessource(r.fichier);
+    const reponse = await fetch(url);
+    if (!reponse.ok) throw new Error(`Ressource introuvable : ${r.fichier} (HTTP ${reponse.status})`);
+    const octets = await reponse.arrayBuffer();
+    if (octets.byteLength !== r.octets) throw new Error(`Taille inattendue pour ${r.fichier}`);
+    if (verifierEmpreintes) {
+      const h = await hexSha256(octets);
+      res.empreintes.set(r.fichier, h);
+      if (h !== r.sha256) throw new Error(`Empreinte SHA-256 différente pour ${r.fichier}`);
+    }
+    return octets;
+  };
+  const essentielles = MANIFESTE.ressources.filter((r) => !SONS_DIFFERES.has(r.fichier));
+  for (const r of MANIFESTE.ressources)
+    if (r.type === 'son') res.urlsSons.set(`/${r.fichier}` as CheminSon, urlRessource(r.fichier));
+  // Gros fichiers : téléchargés en parallèle, sans retarder le démarrage
+  res.sonsDifferes = MANIFESTE.ressources
+    .filter((r) => SONS_DIFFERES.has(r.fichier))
+    .map((r) => lire(r).then((octets) => ({ son: `/${r.fichier}` as CheminSon, octets })));
+  const total = essentielles.length;
   let chargees = 0;
   surProgression?.(0, total);
 
   await Promise.all(
-    MANIFESTE.ressources.map(async (r) => {
+    essentielles.map(async (r) => {
       const url = urlRessource(r.fichier);
-      const reponse = await fetch(url);
-      if (!reponse.ok) throw new Error(`Ressource introuvable : ${r.fichier} (HTTP ${reponse.status})`);
-      const octets = await reponse.arrayBuffer();
-      if (octets.byteLength !== r.octets) throw new Error(`Taille inattendue pour ${r.fichier}`);
-      if (verifierEmpreintes) {
-        const h = await hexSha256(octets);
-        res.empreintes.set(r.fichier, h);
-        if (h !== r.sha256) throw new Error(`Empreinte SHA-256 différente pour ${r.fichier}`);
-      }
+      const octets = await lire(r);
       if (r.type === 'image') {
         const image = await decoderImage(octets, url);
         if (image.width !== r.largeur || image.height !== r.hauteur) {
@@ -102,9 +127,7 @@ export async function chargerRessources(
           hauteur: image.height,
         });
       } else {
-        const chemin = `/${r.fichier}` as CheminSon; // « /audio/saut.wav », comme dans le code Java
-        res.sons.set(chemin, octets);
-        res.urlsSons.set(chemin, url);
+        res.sons.set(`/${r.fichier}` as CheminSon, octets); // « /audio/saut.wav », comme dans le code Java
       }
       surProgression?.(++chargees, total);
     }),

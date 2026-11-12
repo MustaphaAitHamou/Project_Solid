@@ -1,6 +1,6 @@
 {
-  "description": "Ressources originales du jeu Java MarioJava (src/images et src/audio), copiées sans aucune modification.",
-  "depot": "https://github.com/MustaphaAitHamou/MarioJava",
+  "description": "Ressources originales du jeu Java Project_Dhmed (« Super Ahmed Averkan Bros ») (src/images et src/audio), copiées sans aucune modification.",
+  "depot": "https://github.com/MustaphaAitHamou/Project_Dhmed",
   "dossierPublic": "/originaux/mario-ahmed-aberkan",
   "ressources": [
     {
@@ -28,8 +28,8 @@
       "type": "image",
       "fichier": "images/champArretDroite.png",
       "original": "src/images/champArretDroite.png",
-      "octets": 1414,
-      "sha256": "24f7c855972b0485ac2563a6b6276bffeae6e46c7459cb3137a160f0082209bb",
+      "octets": 2240,
+      "sha256": "616b1f24c5bb7002d6cac356472327f28c8cfaeeff4399f2549876678f5d9c9b",
       "largeur": 27,
       "hauteur": 30
     },
@@ -38,8 +38,8 @@
       "type": "image",
       "fichier": "images/champArretGauche.png",
       "original": "src/images/champArretGauche.png",
-      "octets": 1416,
-      "sha256": "7657cf2928e5a44b2a33ab727a3b8ea9d00fda4593d4e54badbafdbe28da9392",
+      "octets": 2240,
+      "sha256": "081c25286b55bd3f35a0816edc5cb084148631856f7eb8ed3381c34d15c2c516",
       "largeur": 27,
       "hauteur": 30
     },
@@ -48,9 +48,9 @@
       "type": "image",
       "fichier": "images/champEcraseDroite.png",
       "original": "src/images/champEcraseDroite.png",
-      "octets": 1147,
-      "sha256": "de02549ab53b17db1cc1e020f140e8e53a3a33a46ce4f8920e97a11764e5b3b9",
-      "largeur": 35,
+      "octets": 1114,
+      "sha256": "69e431ace8aa50b615f0bae6e0455939dc73857582cbbffe6063c06cfcd790e5",
+      "largeur": 65,
       "hauteur": 10
     },
     {
@@ -58,9 +58,9 @@
       "type": "image",
       "fichier": "images/champEcraseGauche.png",
       "original": "src/images/champEcraseGauche.png",
-      "octets": 1148,
-      "sha256": "fea64e17b0e24b8e77b742720cd8119bb39018724c95e00db09ae283b73810fe",
-      "largeur": 35,
+      "octets": 1132,
+      "sha256": "335044c4841ab05dc5a94769498e3028100dec06eb62e4e8f3d815e7b8c6c67c",
+      "largeur": 65,
       "hauteur": 10
     },
     {
@@ -68,8 +68,8 @@
       "type": "image",
       "fichier": "images/champMarcheDroite.png",
       "original": "src/images/champMarcheDroite.png",
-      "octets": 1509,
-      "sha256": "34c77ebde96dc1acc29b1d769e02f0d8df89b65f6156586f6c5a03a8406fb786",
+      "octets": 2356,
+      "sha256": "c23fa87a9a5a3f6c52775af26a3e179a4c8cfbd2b1545e28c5b858ea1611b21d",
       "largeur": 27,
       "hauteur": 30
     },
@@ -78,8 +78,8 @@
       "type": "image",
       "fichier": "images/champMarcheGauche.png",
       "original": "src/images/champMarcheGauche.png",
-      "octets": 1511,
-      "sha256": "a851b3cb0cd88225bfbb10bb13bd02b058cb8827cb8e37df366da40d46d0b034",
+      "octets": 2331,
+      "sha256": "a3aadb1a32fcfd621156aa678c9b82457fb3c0d6332a469b759bfc193b70dad1",
       "largeur": 27,
       "hauteur": 30
     },
@@ -138,8 +138,8 @@
       "type": "image",
       "fichier": "images/marioArretDroite.png",
       "original": "src/images/marioArretDroite.png",
-      "octets": 1696,
-      "sha256": "8a7d109bdab800d1ae381a81ee78d776346f9605d16f13d99d90c862281cb35b",
+      "octets": 3899,
+      "sha256": "8ea0b2cf82d2d6f0ad6088359a6bba42bb240f7eacec9d064067b207832d52b7",
       "largeur": 28,
       "hauteur": 50
     },
@@ -148,8 +148,8 @@
       "type": "image",
       "fichier": "images/marioArretGauche.png",
       "original": "src/images/marioArretGauche.png",
-      "octets": 1692,
-      "sha256": "6584bd13ae8b613e105268bd83f5f263deeeffb34cb6aacec7034ed25c7925e8",
+      "octets": 3873,
+      "sha256": "02f93ae75a799b041189d6fe34cf33c7396857e38d1ea796e36bb26886c6a5e0",
       "largeur": 28,
       "hauteur": 50
     },
@@ -158,8 +158,8 @@
       "type": "image",
       "fichier": "images/marioMarcheDroite.png",
       "original": "src/images/marioMarcheDroite.png",
-      "octets": 1799,
-      "sha256": "1bd3e92a54e9720d1f194b391ee59ded683d3cfc2a21f12eaa9ec5570409591f",
+      "octets": 4060,
+      "sha256": "dec1081b0ce5248d6065883f80454c3887091d19a2b9c0a4c54a3fd9143a2354",
       "largeur": 28,
       "hauteur": 50
     },
@@ -168,8 +168,8 @@
       "type": "image",
       "fichier": "images/marioMarcheGauche.png",
       "original": "src/images/marioMarcheGauche.png",
-      "octets": 1797,
-      "sha256": "23333720f14024a91449ecd1adda2a778330a895da677555fc46494fd32caf12",
+      "octets": 4148,
+      "sha256": "23fc62010cc8dae158f62ca7fd9d4419f59728aac557b11e1d36a9bfd9146a87",
       "largeur": 28,
       "hauteur": 50
     },
@@ -178,9 +178,9 @@
       "type": "image",
       "fichier": "images/marioMeurt.png",
       "original": "src/images/marioMeurt.png",
-      "octets": 1924,
-      "sha256": "e6a2b232afe0d5cbd7541aa58761b6ec703c6eeb38e950369ba32a0f4f90226a",
-      "largeur": 42,
+      "octets": 3501,
+      "sha256": "4d32b8fea55c22c636a5ac9f00e447636d105d057d9548e0e2b936de963d061b",
+      "largeur": 28,
       "hauteur": 50
     },
     {
@@ -188,20 +188,20 @@
       "type": "image",
       "fichier": "images/marioSautDroite.png",
       "original": "src/images/marioSautDroite.png",
-      "octets": 1968,
-      "sha256": "810125181ab5edd4c6e2e85ce08964f7dab5fa84c39a4a1ee0b5a18a988e2b3c",
-      "largeur": 29,
-      "hauteur": 54
+      "octets": 4244,
+      "sha256": "896ad404297fccef61a9ddf18b4ba854455798a670e9a03f867126c0e939416f",
+      "largeur": 28,
+      "hauteur": 50
     },
     {
       "nom": "marioSautGauche",
       "type": "image",
       "fichier": "images/marioSautGauche.png",
       "original": "src/images/marioSautGauche.png",
-      "octets": 1970,
-      "sha256": "75207dc487efd02e2a1319a8c44252a2a0f7b486c6df5c25fbd01f76b31ed351",
-      "largeur": 29,
-      "hauteur": 54
+      "octets": 4245,
+      "sha256": "c44a8525f6a8aea4eb607bd605dc30985050d906d93ed732d4798f42ca912875",
+      "largeur": 28,
+      "hauteur": 50
     },
     {
       "nom": "piece1",
@@ -228,9 +228,9 @@
       "type": "image",
       "fichier": "images/tortueArretDroite.png",
       "original": "src/images/tortueArretDroite.png",
-      "octets": 1970,
-      "sha256": "9c2b68a7f773dee6e98ae695defa019ba3b3d892913d75f365b379ff1a488081",
-      "largeur": 43,
+      "octets": 2851,
+      "sha256": "84a20039a617417ccfa07a7be7d3113de7cbf710a0aa7d4b8dc60040c71bda68",
+      "largeur": 28,
       "hauteur": 50
     },
     {
@@ -238,9 +238,9 @@
       "type": "image",
       "fichier": "images/tortueArretGauche.png",
       "original": "src/images/tortueArretGauche.png",
-      "octets": 1973,
-      "sha256": "626978e5e5ce9262ebe4ed8bf0e1f40edc064189e457b75202d138e1f88206ba",
-      "largeur": 43,
+      "octets": 2898,
+      "sha256": "31a5b8cca5667130703e6129219e4a8fa5abe5bab4d33034d47f87f655a3cd51",
+      "largeur": 28,
       "hauteur": 50
     },
     {
@@ -258,9 +258,9 @@
       "type": "image",
       "fichier": "images/tortueMarcheDroite.png",
       "original": "src/images/tortueMarcheDroite.png",
-      "octets": 1599,
-      "sha256": "7a087413b201f2dc89dc2491efa07cf2b4045acc81942979d2d5c1942b547a93",
-      "largeur": 43,
+      "octets": 3039,
+      "sha256": "ca144f99bc1956c1455b61ada1b9369bca3448cb9f7eda43f12020842a0c9a23",
+      "largeur": 28,
       "hauteur": 50
     },
     {
@@ -268,9 +268,9 @@
       "type": "image",
       "fichier": "images/tortueMarcheGauche.png",
       "original": "src/images/tortueMarcheGauche.png",
-      "octets": 1600,
-      "sha256": "3c23328fac18ea0a67ef462c07f675d6e183f96abefd6a5a057073953ce2550c",
-      "largeur": 43,
+      "octets": 3053,
+      "sha256": "ddb869685faaf3189f16906f0cadaec4e5f0d38c41507b02a76e380df77fca95",
+      "largeur": 28,
       "hauteur": 50
     },
     {
@@ -282,6 +282,19 @@
       "sha256": "fb0c7546d1fdf776f4d5f2ad27d316648b7eb698a47f19f176a2e27d19834df5",
       "largeur": 43,
       "hauteur": 65
+    },
+    {
+      "nom": "A3rav",
+      "type": "son",
+      "fichier": "audio/A3rav.wav",
+      "original": "src/audio/A3rav.wav",
+      "octets": 446706,
+      "sha256": "1e30ce3f92f229dce04e83371ba56723ca44c84bcba8fd5d4fc8e5402e33e2c7",
+      "codec": "PCM",
+      "canaux": 2,
+      "frequence": 48000,
+      "bits": 16,
+      "duree": 2.325
     },
     {
       "nom": "boum",
@@ -297,56 +310,56 @@
       "duree": 0.702
     },
     {
-      "nom": "ecrasePersonnage",
+      "nom": "cheikhLdjama3",
       "type": "son",
-      "fichier": "audio/ecrasePersonnage.wav",
-      "original": "src/audio/ecrasePersonnage.wav",
-      "octets": 2360,
-      "sha256": "55b55edd3778e7b95d38f37bbe4e7e7614c6ef7f1c89344ac86ab254cdcc48f0",
+      "fichier": "audio/cheikhLdjama3.wav",
+      "original": "src/audio/cheikhLdjama3.wav",
+      "octets": 176386,
+      "sha256": "d5a324fd68b985f305847975aa2e5b445bc595009f750101fff78f24e73e71ef",
       "codec": "PCM",
-      "canaux": 1,
-      "frequence": 11025,
-      "bits": 8,
-      "duree": 0.209
+      "canaux": 2,
+      "frequence": 48000,
+      "bits": 16,
+      "duree": 0.917
+    },
+    {
+      "nom": "issordiyen",
+      "type": "son",
+      "fichier": "audio/issordiyen.wav",
+      "original": "src/audio/issordiyen.wav",
+      "octets": 176386,
+      "sha256": "1ca023c86a6b388738fcd5bb66b290c82a429a85694b38c4d810ab92caff6426",
+      "codec": "PCM",
+      "canaux": 2,
+      "frequence": 48000,
+      "bits": 16,
+      "duree": 0.917
     },
     {
       "nom": "partieGagnee",
       "type": "son",
       "fichier": "audio/partieGagnee.wav",
       "original": "src/audio/partieGagnee.wav",
-      "octets": 1145690,
-      "sha256": "6f5cb2002c1be913565a5a3cf378107f409ae4faa84059db4e3eb93766a8d652",
+      "octets": 2900292,
+      "sha256": "ea7204d9a360d7881f6b6601d0c88e0853577edc477598b18529f4d39c292d88",
       "codec": "PCM",
       "canaux": 2,
-      "frequence": 44100,
+      "frequence": 48000,
       "bits": 16,
-      "duree": 6.494
+      "duree": 15.105
     },
     {
       "nom": "partiePerdue",
       "type": "son",
       "fichier": "audio/partiePerdue.wav",
       "original": "src/audio/partiePerdue.wav",
-      "octets": 292616,
-      "sha256": "a5efec02810a5acdca19c546f36fbf9f174a5ee8bc8d7869fa90996ccf39df87",
-      "codec": "PCM",
-      "canaux": 1,
-      "frequence": 22050,
-      "bits": 16,
-      "duree": 6.634
-    },
-    {
-      "nom": "piece",
-      "type": "son",
-      "fichier": "audio/piece.wav",
-      "original": "src/audio/piece.wav",
-      "octets": 193938,
-      "sha256": "888beb8291fed5bb7ac076de51f738bfa2819325e1bfe5a01a9cfd6ec97b312d",
+      "octets": 696398,
+      "sha256": "60baa49b59f3c0e3214f1039718e1de7911313aa19a4987a31d6c61b72e1fed9",
       "codec": "PCM",
       "canaux": 2,
       "frequence": 44100,
       "bits": 16,
-      "duree": 1.099
+      "duree": 3.947
     },
     {
       "nom": "saut",
@@ -360,6 +373,19 @@
       "frequence": 11025,
       "bits": 8,
       "duree": 0.243
+    },
+    {
+      "nom": "themeSong",
+      "type": "son",
+      "fichier": "audio/themeSong.wav",
+      "original": "src/audio/themeSong.wav",
+      "octets": 12112078,
+      "sha256": "33319e2217a3eeb0290f5ac90caedce61d85ad1d60e89b52ef04eb12ca2ee337",
+      "codec": "PCM",
+      "canaux": 2,
+      "frequence": 48000,
+      "bits": 16,
+      "duree": 63.083
     }
   ]
 }

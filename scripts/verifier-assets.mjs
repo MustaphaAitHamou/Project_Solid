@@ -5,8 +5,9 @@
 // Usage :
 //   node scripts/verifier-assets.mjs                    -> vérifie public/
 //   node scripts/verifier-assets.mjs dist               -> vérifie le build de production
-//   node scripts/verifier-assets.mjs public --depot <chemin-MarioJava>
-//        -> compare aussi avec src/ et bin/ du dépôt Java d'origine
+//   node scripts/verifier-assets.mjs public --depot <chemin-Project_Dhmed>
+//        -> compare aussi avec src/images et src/audio du dépôt Java d'origine
+//           (bin/ y contient une ancienne copie compilée, non utilisée)
 import { existsSync, readFileSync, statSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { DOSSIER_ORIGINAUX, listerFichiers, sha256 } from './lib-assets.mjs';
@@ -34,9 +35,8 @@ for (const r of manifeste.ressources) {
   let comparaisonDepot = '';
   if (depot) {
     const hSrc = sha256(join(depot, 'src', r.fichier));
-    const hBin = sha256(join(depot, 'bin', r.fichier));
-    comparaisonDepot = hSrc === h && hBin === h ? ' = src/ = bin/' : ' ≠ DÉPÔT';
-    if (hSrc !== h || hBin !== h) erreurs++;
+    comparaisonDepot = hSrc === h ? ' = src/' : ' ≠ DÉPÔT';
+    if (hSrc !== h) erreurs++;
   }
   if (!ok) erreurs++;
   lignes.push(`${ok ? 'OK  ' : 'ÉCHEC'} ${h}  ${r.fichier}${comparaisonDepot}`);

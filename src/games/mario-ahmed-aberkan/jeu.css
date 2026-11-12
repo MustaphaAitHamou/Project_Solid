@@ -22,7 +22,7 @@
     0 18px 50px rgb(0 0 0 / 0.45);
 }
 
-.ks-mario:focus-visible .ks-mario__cadre {
+.ks-mario:not(.ks-mario--actif):focus-visible .ks-mario__cadre {
   outline: 2px solid rgb(255 213 74 / 0.55);
   outline-offset: 3px;
 }
@@ -240,4 +240,202 @@
 .ks-defilement-bloque,
 .ks-defilement-bloque body {
   overflow: hidden;
+}
+
+/* ---------------------------------------------------------------- écrans (accueil, pause, fin) */
+.ks-mario__cadre {
+  container-type: size;
+}
+.ks-mario__voile--accueil {
+  background: radial-gradient(120% 90% at 50% 40%, rgb(8 12 26 / 0.35), rgb(8 12 26 / 0.78)), rgb(8 12 26 / 0.2);
+}
+.ks-mario__voile--pause {
+  background: rgb(8 12 26 / 0.7);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+.ks-mario__voile--fin {
+  place-content: end center;
+  padding-bottom: 3.5cqh;
+  background: linear-gradient(180deg, transparent 45%, rgb(8 12 26 / 0.72));
+}
+.ks-mario__carte {
+  display: grid;
+  justify-items: center;
+  gap: clamp(6px, 2.6cqh, 14px);
+  max-width: 92cqw;
+}
+.ks-mario__surtitre {
+  margin: 0;
+  color: #ffd54a;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-size: clamp(10px, 3.2cqh, 13px);
+}
+.ks-mario__titre {
+  margin: 0;
+  font-size: clamp(18px, 9cqh, 40px);
+  line-height: 1.05;
+  font-weight: 900;
+  text-shadow: 0 3px 0 rgb(0 0 0 / 0.35);
+}
+.ks-mario__choix {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+.ks-mario__choix--colonne {
+  flex-direction: column;
+  align-items: stretch;
+  min-width: min(260px, 80cqw);
+}
+.ks-mario__bouton {
+  appearance: none;
+  border: 1px solid rgb(255 255 255 / 0.28);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.12);
+  color: #fff;
+  font:
+    700 clamp(12px, 4cqh, 16px) / 1 system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
+  padding: 0.7em 1.3em;
+  cursor: pointer;
+  transition:
+    transform 0.12s ease,
+    background 0.15s ease;
+}
+.ks-mario__bouton:hover {
+  background: rgb(255 255 255 / 0.2);
+  transform: translateY(-1px);
+}
+.ks-mario__bouton:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 2px;
+}
+.ks-mario__bouton--principal {
+  border-color: transparent;
+  background: #ffd54a;
+  color: #1a1400;
+  font-size: clamp(14px, 5cqh, 21px);
+  box-shadow: 0 6px 18px rgb(0 0 0 / 0.35);
+}
+.ks-mario__bouton--principal:hover {
+  background: #ffe07a;
+}
+.ks-mario__record {
+  margin: 0;
+  font-size: clamp(11px, 3.6cqh, 14px);
+  color: #ffe9a3;
+}
+.ks-mario__credit {
+  margin: 0;
+  font-size: clamp(9px, 2.8cqh, 11px);
+  opacity: 0.75;
+}
+.ks-mario__stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+  margin: 0;
+  padding: clamp(6px, 2.4cqh, 12px);
+  border-radius: 14px;
+  background: rgb(8 12 26 / 0.72);
+  box-shadow: 0 0 0 1px rgb(255 255 255 / 0.12);
+}
+.ks-mario__stats div {
+  min-width: 70px;
+  padding: 0 6px;
+}
+.ks-mario__stats dt {
+  font-size: clamp(9px, 2.8cqh, 12px);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.75;
+}
+.ks-mario__stats dd {
+  margin: 2px 0 0;
+  font-size: clamp(13px, 5cqh, 22px);
+  font-weight: 800;
+}
+.ks-mario__stats small {
+  display: block;
+  font-size: 0.55em;
+  font-weight: 700;
+  color: #ffd54a;
+}
+.ks-mario__badge {
+  margin: 0;
+  padding: 0.35em 0.9em;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #ffd54a, #ff9f43);
+  color: #1a1400;
+  font-weight: 900;
+  font-size: clamp(11px, 3.6cqh, 15px);
+  animation: ks-badge 0.9s ease-in-out infinite alternate;
+}
+@keyframes ks-badge {
+  to {
+    transform: scale(1.06);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ks-mario__badge {
+    animation: none;
+  }
+}
+
+/* Boutons pause et son, dans le cadre du jeu */
+.ks-mario__barre {
+  position: absolute;
+  top: 17%;
+  right: 1.4%;
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+}
+.ks-mario--actif .ks-mario__barre,
+.ks-mario[data-phase='pause'] .ks-mario__barre {
+  display: flex;
+}
+.ks-mario__icone {
+  display: grid;
+  place-items: center;
+  width: clamp(28px, 10cqh, 40px);
+  height: clamp(28px, 10cqh, 40px);
+  padding: 0;
+  border: 1px solid rgb(255 255 255 / 0.3);
+  border-radius: 50%;
+  background: rgb(8 12 26 / 0.5);
+  color: #fff;
+  cursor: pointer;
+}
+.ks-mario__icone svg {
+  width: 58%;
+  height: 58%;
+  fill: currentColor;
+}
+.ks-mario__icone:hover {
+  background: rgb(8 12 26 / 0.75);
+}
+
+/* Petits cadres (téléphone en portrait) : l'essentiel seulement */
+@container (max-height: 260px) {
+  .ks-mario__aide,
+  .ks-mario__credit,
+  .ks-mario__record {
+    display: none;
+  }
+  .ks-mario__stats div {
+    min-width: 0;
+  }
+}
+@container (max-height: 200px) {
+  .ks-mario__surtitre {
+    display: none;
+  }
 }

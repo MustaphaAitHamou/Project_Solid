@@ -20,7 +20,7 @@ export const CATALOGUE: FicheJeu[] = [
     slug: 'mario-ahmed-aberkan',
     titre: 'Mario Ahmed Aberkan',
     description:
-      'Le jeu de plateforme d’origine, porté de Java vers le Web à l’identique : mêmes images, mêmes sons, même niveau.',
+      'Super Ahmed Averkan Bros : le jeu de plateforme d’origine, en version moderne (fluide, effets, musique) ou classique, fidèle au Java.',
     url: '/jeux/mario-ahmed-aberkan',
     vignette: {
       fond: `${ORIGINAUX}/fondEcran.png`,
@@ -28,6 +28,6 @@ export const CATALOGUE: FicheJeu[] = [
       largeurSprite: 28,
       hauteurSprite: 50,
     },
-    commandes: '← → Espace',
+    commandes: '← → / Q D · Espace / Z',
   },
 ];

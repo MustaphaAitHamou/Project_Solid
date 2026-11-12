@@ -4,3 +4,4 @@ public/originaux/
 tests/fidelite/references/
 tests/e2e/references/
 package-lock.json
+tests/moderne/parcours-victoire.json

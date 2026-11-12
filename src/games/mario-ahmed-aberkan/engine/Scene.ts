@@ -4,15 +4,21 @@ import { Mario } from './Mario.ts';
 import { BLOCS, CHAMPS, MARIO, PIECES, TORTUES, TUYAUX_ROUGES } from './niveau.ts';
 import type { Objet } from './Objet.ts';
 import { Bloc, Piece, TuyauRouge } from './objets.ts';
+import type { Corrections } from '../config.ts';
 import type { Graphiques, NomImage, Police, ResultatPartie, SortieAudio } from './types.ts';
 
 /** new Font("Arial", Font.PLAIN, 18) */
 export const POLICE_SCORE: Police = { nom: 'Arial', style: 0, taille: 18 };
 /** new Font("Arial", Font.BOLD, 50) */
 export const POLICE_FIN: Police = { nom: 'Arial', style: 1, taille: 50 };
+/** new Font("Arial", Font.BOLD, 10) — ligne de crédit ajoutée dans Project_Dhmed */
+export const POLICE_CREDIT: Police = { nom: 'Arial', style: 1, taille: 10 };
+export const TEXTE_CREDIT = 'Par Aknanir nAth Yettura pour ig: @dz_kabylifornie';
+export const TEXTE_VICTOIRE = 'arwu cḍaḥ !!';
+export const TEXTE_DEFAITE = 'Tqarseḍ akk ziɣ';
 
 /**
- * Portage de com.mosmos.jeu.Scene — le « moteur » du jeu.
+ * Portage de com.mosmos.jeu.Scene (version Project_Dhmed) — le « moteur » du jeu.
  *
  * Comme en Java, toute la logique d'un tour (collisions, défilement, animations, sauts, mort)
  * s'exécute dans paintComponent(), entremêlée aux appels de dessin : saute(), marche(), meurt()
@@ -63,10 +69,18 @@ export class Scene {
   readonly toutesLesPieces: readonly Piece[];
   /** Ajout Web (sans effet sur la logique) : résultat affiché au dernier tour, null si aucun. */
   private resultat: ResultatPartie | null = null;
+  private readonly corrections: Pick<Corrections, 'musiqueEtSonDeVictoire'>;
+  /** Correction « musiqueEtSonDeVictoire » : indicateurs propres à la musique de thème. */
+  private musiqueLancee = false;
+  private musiqueArretee = false;
 
   // **** CONSTRUCTEUR ****
-  constructor(audio: SortieAudio) {
+  constructor(
+    audio: SortieAudio,
+    corrections: Pick<Corrections, 'musiqueEtSonDeVictoire'> = { musiqueEtSonDeVictoire: false },
+  ) {
     this.audio = audio;
+    this.corrections = corrections;
     this.xFond1 = -50;
     this.xFond2 = 750;
     this.dx = 0;
@@ -204,10 +218,32 @@ export class Scene {
   }
 
   finDePartie(): boolean {
-    if (this.partieGagnee() === true || this.partiePerdue() === true) {
-      return true;
+    if (this.corrections.musiqueEtSonDeVictoire) {
+      // Correction (voir config.ts) : la musique ne consomme plus l'indicateur du son de victoire
+      const fin = this.partieGagnee() === true || this.partiePerdue() === true;
+      if (!fin && !this.musiqueLancee) {
+        this.audio.playSound('/audio/themeSong.wav');
+        this.musiqueLancee = true;
+      } else if (fin && this.musiqueLancee && !this.musiqueArretee) {
+        this.audio.stopSound('/audio/themeSong.wav');
+        this.musiqueArretee = true;
+      }
+      return fin;
     }
-    return false;
+    // Code Java d'origine (Project_Dhmed), reproduit tel quel
+    if (this.partieGagnee() === true || this.partiePerdue() === true) {
+      if (this.ok === true) {
+        this.audio.stopSound('/audio/themeSong.wav');
+        this.ok = false;
+      }
+      return true;
+    } else {
+      if (this.ok === true) {
+        this.audio.playSound('/audio/themeSong.wav');
+        this.ok = false;
+      }
+      return false;
+    }
   }
 
   /** Dessin de toutes les images visibles à l'écran (appelé toutes les 3 ms environ en Java). */
@@ -238,7 +274,7 @@ export class Scene {
     for (let i = 0; i < this.tabPieces.length; i++) {
       if (this.mario.procheObjet(this.tabPieces[i])) {
         if (this.mario.contactPiece(this.tabPieces[i])) {
-          this.audio.playSound('/audio/piece.wav');
+          this.audio.playSound('/audio/issordiyen.wav');
           this.tabPieces.splice(i, 1);
           this.score.setNbPieces(this.score.getNbPieces() + 1);
         }
@@ -287,7 +323,7 @@ export class Scene {
       if (this.mario.prochePersonnage(this.tabChamps[i]) && this.tabChamps[i].isVivant() === true) {
         this.mario.contactPersonnage(this.tabChamps[i]);
         if (this.tabChamps[i].isVivant() === false) {
-          this.audio.playSound('/audio/ecrasePersonnage.wav');
+          this.audio.playSound('/audio/cheikhLdjama3.wav');
         }
       }
     }
@@ -296,7 +332,7 @@ export class Scene {
       if (this.mario.prochePersonnage(this.tabTortues[i]) && this.tabTortues[i].isVivant() === true) {
         this.mario.contactPersonnage(this.tabTortues[i]);
         if (this.tabTortues[i].isVivant() === false) {
-          this.audio.playSound('/audio/ecrasePersonnage.wav');
+          this.audio.playSound('/audio/A3rav.wav');
         }
       }
     }
@@ -313,6 +349,9 @@ export class Scene {
     // Image de fond
     g2.drawImage(this.imgFond1, this.xFond1, 0);
     g2.drawImage(this.imgFond2, this.xFond2, 0);
+    const pub = POLICE_CREDIT;
+    g2.setFont(pub);
+    g2.drawString(TEXTE_CREDIT, 180, 10);
 
     // Image du château du départ
     g2.drawImage(this.imgChateau1, 10 - this.xPos, 95);
@@ -379,10 +418,10 @@ export class Scene {
       const policeFin = POLICE_FIN;
       g2.setFont(policeFin);
       if (this.partieGagnee() === true) {
-        g2.drawString('Vous avez gagné !!', 120, 180);
+        g2.drawString(TEXTE_VICTOIRE, 120, 180);
         this.resultat = 'gagnee';
       } else {
-        g2.drawString('Vous avez perdu...', 120, 180);
+        g2.drawString(TEXTE_DEFAITE, 120, 180);
         this.resultat = 'perdue';
       }
     } else {

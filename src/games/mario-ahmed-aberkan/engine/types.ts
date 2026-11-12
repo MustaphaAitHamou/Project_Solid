@@ -29,11 +29,13 @@ export type NomImage =
 /** Chemins des sons, écrits exactement comme dans les appels Audio.playSound(...) du Java. */
 export type CheminSon =
   | '/audio/saut.wav'
-  | '/audio/piece.wav'
-  | '/audio/ecrasePersonnage.wav'
+  | '/audio/issordiyen.wav'
+  | '/audio/cheikhLdjama3.wav'
+  | '/audio/A3rav.wav'
   | '/audio/boum.wav'
   | '/audio/partieGagnee.wav'
-  | '/audio/partiePerdue.wav';
+  | '/audio/partiePerdue.wav'
+  | '/audio/themeSong.wav';
 
 /** Touches gérées par Clavier.java (KeyEvent.VK_RIGHT, VK_LEFT, VK_SPACE). */
 export type Touche = 'DROITE' | 'GAUCHE' | 'ESPACE';
@@ -53,9 +55,10 @@ export interface Graphiques {
   drawString(str: string, x: number, y: number): void;
 }
 
-/** Remplace l'appel statique Audio.playSound(son) du Java. */
+/** Remplace les appels statiques Audio.playSound(son) et Audio.stopSound(son) du Java. */
 export interface SortieAudio {
   playSound(son: CheminSon): void;
+  stopSound(son: CheminSon): void;
 }
 
 export type ResultatPartie = 'gagnee' | 'perdue';

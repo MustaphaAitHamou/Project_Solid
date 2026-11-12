@@ -74,7 +74,10 @@ export function executerScenario(
   surLigne?: (ligne: string, tick: number) => void,
 ): string[] {
   const sons: string[] = [];
-  const partie = new Partie({ audio: { playSound: (son) => sons.push(son) }, corrections });
+  const partie = new Partie({
+    audio: { playSound: (son) => sons.push(son), stopSound: (son) => sons.push(`STOP ${son}`) },
+    corrections,
+  });
   const lignes: string[] = [];
   for (let tick = 1; tick <= scenario.ticks; tick++) {
     const debut = sons.length;

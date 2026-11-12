@@ -10,7 +10,8 @@ import {
   CORRECTIONS_PAR_DEFAUT,
   type Corrections,
 } from '../../src/games/mario-ahmed-aberkan/config.ts';
-import { Partie } from '../../src/games/mario-ahmed-aberkan/engine/index.ts';
+import { Partie, type CheminSon } from '../../src/games/mario-ahmed-aberkan/engine/index.ts';
+import { TEXTE_DEFAITE, TEXTE_VICTOIRE } from '../../src/games/mario-ahmed-aberkan/engine/Scene.ts';
 import { lireScenario, type Scenario } from '../fidelite/trace.ts';
 
 const scenario = (nom: string): Scenario =>
@@ -90,12 +91,12 @@ describe('Correction « maintien des touches »', () => {
 
   it('les répétitions d’appui ne relancent ni le saut ni son son', () => {
     const sons: string[] = [];
-    const p = new Partie({ audio: { playSound: (s) => sons.push(s) } });
+    const p = new Partie({ audio: { playSound: (s) => sons.push(s), stopSound: () => undefined } });
     p.toucheEnfoncee('ESPACE');
     p.toucheEnfoncee('ESPACE');
     p.toucheEnfoncee('ESPACE');
     tours(p, 400);
-    expect(sons).toEqual(['/audio/saut.wav']);
+    expect(sons.filter((s) => s === '/audio/saut.wav')).toEqual(['/audio/saut.wav']);
     expect(p.scene.mario.isSaut()).toBe(false);
   });
 });
@@ -120,18 +121,18 @@ describe('Correction « retour depuis la fin du niveau »', () => {
 });
 
 describe('Correction « compte à rebours figé en fin de partie »', () => {
-  it('victoire puis attente : reste « Vous avez gagné !! » (Java : devient « perdu » à 0 s)', () => {
+  it('victoire puis attente : reste « arwu cḍaḥ !! » (Java : devient « Tqarseḍ akk ziɣ » à 0 s)', () => {
     const sc = scenario('victoire-puis-attente');
     const texteFin = (p: Partie): string | undefined =>
       [...p.image].find((op) => op.type === 'texte' && op.police.taille === 50)?.texte;
 
     const corrige = rejouer(sc, CORRECTIONS_PAR_DEFAUT);
-    expect(texteFin(corrige)).toBe('Vous avez gagné !!');
+    expect(texteFin(corrige)).toBe(TEXTE_VICTOIRE);
     expect(corrige.scene.getCompteARebours().getCompteurTemps()).toBe(86);
     expect(corrige.getPremierResultat()).toBe('gagnee');
 
     const java = rejouer(sc, AUCUNE_CORRECTION);
-    expect(texteFin(java)).toBe('Vous avez perdu...');
+    expect(texteFin(java)).toBe(TEXTE_DEFAITE);
     expect(java.scene.getCompteARebours().getCompteurTemps()).toBe(-9);
   });
 
@@ -143,6 +144,56 @@ describe('Correction « compte à rebours figé en fin de partie »', () => {
     tours(p, 2000);
     expect(p.scene.getCompteARebours().getCompteurTemps()).toBe(temps);
     expect(temps).toBeGreaterThan(90);
+  });
+});
+
+describe('Correction « musique et son de victoire »', () => {
+  /** Rejoue un scénario en notant les appels Audio.playSound / Audio.stopSound et leur tour. */
+  function journal(nom: string, corrections: Corrections): { tour: number; action: string; son: CheminSon }[] {
+    const sc = scenario(nom);
+    const evenements: { tour: number; action: string; son: CheminSon }[] = [];
+    let tour = 0;
+    const p = new Partie({
+      corrections,
+      audio: {
+        playSound: (son) => evenements.push({ tour, action: 'play', son }),
+        stopSound: (son) => evenements.push({ tour, action: 'stop', son }),
+      },
+    });
+    for (tour = 1; tour <= sc.ticks; tour++) {
+      p.executerTour(() => {
+        for (const e of sc.entrees.get(tour) ?? []) {
+          if (e.action === 'appui') p.clavier.keyPressed(e.touche);
+          else p.clavier.keyReleased(e.touche);
+        }
+      });
+    }
+    return evenements;
+  }
+  const musique = (e: { son: CheminSon }) => e.son === '/audio/themeSong.wav';
+
+  it('Java strict : musique lancée au 1er tour, jamais arrêtée, son de victoire jamais joué', () => {
+    const e = journal('victoire', AUCUNE_CORRECTION);
+    expect(e.filter(musique)).toEqual([{ tour: 1, action: 'play', son: '/audio/themeSong.wav' }]);
+    expect(e.some((x) => x.son === '/audio/partieGagnee.wav')).toBe(false);
+  });
+
+  it('corrigé : musique lancée au 1er tour, arrêtée à la victoire, son de victoire joué une fois', () => {
+    const e = journal('victoire', CORRECTIONS_PAR_DEFAUT);
+    expect(e.filter(musique)).toEqual([
+      { tour: 1, action: 'play', son: '/audio/themeSong.wav' },
+      { tour: 4710, action: 'stop', son: '/audio/themeSong.wav' },
+    ]);
+    expect(e.filter((x) => x.son === '/audio/partieGagnee.wav')).toEqual([
+      { tour: 4710, action: 'play', son: '/audio/partieGagnee.wav' },
+    ]);
+  });
+
+  it('corrigé : la musique s’arrête aussi à la mort de Mario', () => {
+    const e = journal('aleatoire-37', CORRECTIONS_PAR_DEFAUT);
+    const arret = e.find((x) => musique(x) && x.action === 'stop');
+    const boum = e.find((x) => x.son === '/audio/boum.wav');
+    expect(arret?.tour).toBe(boum?.tour);
   });
 });
 

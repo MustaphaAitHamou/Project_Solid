@@ -1,11 +1,12 @@
 /**
- * Jeu « Mario Ahmed Aberkan » dans un vrai navigateur (build de production).
- * Les numéros renvoient à la liste de vérifications du cahier des charges.
+ * Mode Classique (portage fidèle du jeu Java Project_Dhmed) dans un vrai navigateur, sur le
+ * build de production. Les numéros renvoient à la liste de vérifications du cahier des charges.
  */
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { expect, test } from '@playwright/test';
+import { TEXTE_CREDIT, TEXTE_DEFAITE, TEXTE_VICTOIRE } from '../../src/games/mario-ahmed-aberkan/engine/Scene.ts';
 import {
   commencer,
   comparerAuJava,
@@ -26,14 +27,19 @@ const manifeste = JSON.parse(
 };
 
 test.describe('Ressources originales et rendu', () => {
-  test('4. les 28 PNG et 6 WAV chargés sont les fichiers originaux (SHA-256 vérifiés dans le navigateur)', async ({
+  test('4. les 28 PNG et 8 WAV chargés sont les fichiers originaux (SHA-256 vérifiés dans le navigateur)', async ({
     page,
     request,
   }) => {
     const erreurs = surveillerErreurs(page);
-    await ouvrirJeu(page);
+    await ouvrirJeu(page, 'classique');
+    // les 3 gros WAV (musique, jingles) arrivent en arrière-plan
+    await expect
+      .poll(async () => Object.keys(await page.evaluate(() => window.__jeuMario.empreintes())).length, {
+        timeout: 30_000,
+      })
+      .toBe(36);
     const empreintes = await page.evaluate(() => window.__jeuMario.empreintes());
-    expect(Object.keys(empreintes)).toHaveLength(34);
     for (const r of manifeste.ressources) expect(empreintes[r.fichier], r.fichier).toBe(r.sha256);
     // et le serveur sert exactement les octets du dépôt Java
     for (const r of manifeste.ressources) {
@@ -44,7 +50,7 @@ test.describe('Ressources originales et rendu', () => {
   });
 
   test('5. les images gardent leurs dimensions et le jeu ses proportions 2:1', async ({ page }) => {
-    await ouvrirJeu(page);
+    await ouvrirJeu(page, 'classique');
     const images = await page.evaluate(() => window.__jeuMario.images());
     expect(images).toHaveLength(28);
     for (const i of images) {
@@ -78,18 +84,22 @@ test.describe('Ressources originales et rendu', () => {
   ];
   for (const [nom, scenario, tour, fin] of CAPTURES) {
     test(`4. rendu identique au pixel près au jeu Java : ${nom} (tour ${tour})`, async ({ page }) => {
-      await ouvrirJeu(page);
+      await ouvrirJeu(page, 'classique');
       await rejouerScenario(page, scenario, tour);
-      const { differents, compares } = await comparerAuJava(page, `${scenario}-${tour}.png`, fin);
+      const { differents, compares, ecartMax, arrondis } = await comparerAuJava(page, `${scenario}-${tour}.png`, fin);
+      test.info().annotations.push({
+        type: 'mesure',
+        description: `${nom} : ${compares} pixels comparés, ${arrondis} écarts d'arrondi, écart max ${ecartMax}/255`,
+      });
       expect(compares).toBeGreaterThan(180_000); // 700×350 moins les zones de texte
-      expect(differents).toBe(0);
+      expect(differents).toBe(0); // au plus 2 niveaux sur 255 (arrondi des bords semi-transparents)
     });
   }
 });
 
 test.describe('Jouabilité au clavier (temps réel)', () => {
   test('6. Mario se déplace à droite puis à gauche, le décor défile (12)', async ({ page }) => {
-    await ouvrirJeu(page);
+    await ouvrirJeu(page, 'classique');
     await commencer(page);
     const e0 = await etat(page);
     expect(e0.xPos).toBe(-1);
@@ -113,7 +123,7 @@ test.describe('Jouabilité au clavier (temps réel)', () => {
   test('7. Mario saute (même hauteur et même trajectoire qu’en Java) et 13. le son de saut est joué', async ({
     page,
   }) => {
-    await ouvrirJeu(page);
+    await ouvrirJeu(page, 'classique');
     await commencer(page);
     await page.keyboard.press('Space');
     let minY = 999;
@@ -129,13 +139,13 @@ test.describe('Jouabilité au clavier (temps réel)', () => {
     expect(minY).toBeGreaterThanOrEqual(85);
     expect(minY).toBeLessThanOrEqual(95);
     expect((await etat(page)).mario.y).toBe(243); // retombé au sol
-    expect(await sons(page)).toEqual(['/audio/saut.wav']);
+    expect(await sons(page)).toEqual(['/audio/themeSong.wav', '/audio/saut.wav']); // musique lancée au 1er tour, comme en Java
   });
 
   test('8. collisions : le premier tuyau bloque Mario ; maintenir → et sauter permet de le franchir', async ({
     page,
   }) => {
-    await ouvrirJeu(page);
+    await ouvrirJeu(page, 'classique');
     await commencer(page);
     await page.keyboard.down('ArrowRight');
     await expect.poll(async () => (await etat(page)).xPos, { timeout: 5000 }).toBe(272);
@@ -147,18 +157,18 @@ test.describe('Jouabilité au clavier (temps réel)', () => {
   });
 
   test('11. le compte à rebours décompte en temps réel et le score s’affiche', async ({ page }) => {
-    await ouvrirJeu(page);
+    await ouvrirJeu(page, 'classique');
     await commencer(page);
     const e0 = await etat(page);
-    expect(e0.textes).toEqual(['0pièce(s) trouvée(s) sur 10', 'Temps restant : 100']);
+    expect(e0.textes).toEqual([TEXTE_CREDIT, '0pièce(s) trouvée(s) sur 10', 'Temps restant : 100']);
     await page.waitForTimeout(2600);
     const e1 = await etat(page);
     expect(e1.compteurTemps).toBe(98);
-    expect(e1.textes[1]).toBe('Temps restant : 98');
+    expect(e1.textes[2]).toBe('Temps restant : 98');
   });
 
   test('19. les touches du jeu ne font pas défiler la page et n’activent pas les boutons', async ({ page }) => {
-    await ouvrirJeu(page);
+    await ouvrirJeu(page, 'classique');
     await page.evaluate(() => (document.body.style.paddingBottom = '2000px')); // page défilable
     await commencer(page);
     const hauteur = await page.evaluate(() => document.documentElement.scrollHeight - innerHeight);
@@ -184,7 +194,7 @@ test.describe('Jouabilité au clavier (temps réel)', () => {
   test('focus : le jeu reste jouable après un clic ailleurs ; perte de focus de la fenêtre = touches relâchées', async ({
     page,
   }) => {
-    await ouvrirJeu(page);
+    await ouvrirJeu(page, 'classique');
     await commencer(page);
     await page.mouse.click(5, 5); // clic hors du jeu
     await page.keyboard.down('ArrowRight');
@@ -201,7 +211,7 @@ test.describe('Jouabilité au clavier (temps réel)', () => {
 
 test.describe('Ennemis, pièces, défaite, victoire (entrées rejouées à l’identique du Java)', () => {
   test('9. les ennemis se déplacent seuls et font demi-tour', async ({ page }) => {
-    await ouvrirJeu(page);
+    await ouvrirJeu(page, 'classique');
     await commencer(page);
     const parcours = new Array(8).fill(0);
     let precedent = await etat(page);
@@ -216,61 +226,64 @@ test.describe('Ennemis, pièces, défaite, victoire (entrées rejouées à l’i
     expect(precedent.tortues[0].x).toBeLessThan(950);
   });
 
-  test('10. une pièce se ramasse (score, son « piece.wav »)', async ({ page }) => {
-    await ouvrirJeu(page);
+  test('10. une pièce se ramasse (score, son « issordiyen.wav »)', async ({ page }) => {
+    await ouvrirJeu(page, 'classique');
     await rejouerScenario(page, 'victoire', 700);
     const e = await etat(page);
     expect(e.score).toBe(1);
     expect(e.piecesRestantes).toBe(9);
-    expect(e.textes[0]).toBe('1pièce(s) trouvée(s) sur 10');
-    expect(await sons(page)).toContain('/audio/piece.wav');
+    expect(e.textes[1]).toBe('1pièce(s) trouvée(s) sur 10');
+    expect(await sons(page)).toContain('/audio/issordiyen.wav');
   });
 
   test('9 et 14. un ennemi écrasé puis la défaite : sons, message et « Rejouer »', async ({ page }) => {
-    await ouvrirJeu(page);
+    await ouvrirJeu(page, 'classique');
     // aleatoire-23 : un champignon est écrasé, puis Mario meurt au tour 6322
     await rejouerScenario(page, 'aleatoire-23', 6500);
     const e = await etat(page);
     expect(e.champs.some((c) => !c.vivant)).toBe(true);
     expect(e.mario.vivant).toBe(false);
     expect(e.premierResultat).toBe('perdue');
-    expect(e.textes).toContain('Vous avez perdu...');
+    expect(e.textes).toContain(TEXTE_DEFAITE);
     const s = await sons(page);
-    expect(s.indexOf('/audio/ecrasePersonnage.wav')).toBeGreaterThanOrEqual(0);
+    expect(s.indexOf('/audio/cheikhLdjama3.wav')).toBeGreaterThanOrEqual(0); // champignon écrasé
     expect(s.slice(-2)).toEqual(['/audio/boum.wav', '/audio/partiePerdue.wav']);
     await expect(page.locator('.ks-mario__rejouer')).toBeVisible({ timeout: 5000 });
     await expect(page.locator('.ks-mario')).toHaveAttribute('data-phase', 'terminee');
   });
 
   test('14. perdre par manque de temps (100 s)', async ({ page }) => {
-    await ouvrirJeu(page);
+    await ouvrirJeu(page, 'classique');
     await rejouerScenario(page, 'attente-110s', 31700);
     const e = await etat(page);
     expect(e.compteurTemps).toBe(0); // figé à 0 (le Java continuait en négatif)
     expect(e.premierResultat).toBe('perdue');
-    expect(e.textes).toContain('Vous avez perdu...');
+    expect(e.textes).toContain(TEXTE_DEFAITE);
   });
 
-  test('15. terminer le niveau : 10 pièces, arrivée, « Vous avez gagné !! » et partieGagnee.wav', async ({ page }) => {
-    await ouvrirJeu(page);
+  test('15. terminer le niveau : 10 pièces, arrivée, « arwu cḍaḥ !! », musique arrêtée et partieGagnee.wav', async ({
+    page,
+  }) => {
+    await ouvrirJeu(page, 'classique');
     await rejouerScenario(page, 'victoire', 4800);
     const e = await etat(page);
     expect(e.score).toBe(10);
     expect(e.xPos).toBeGreaterThan(4400);
     expect(e.premierResultat).toBe('gagnee');
-    expect(e.textes).toContain('Vous avez gagné !!');
+    expect(e.textes).toContain(TEXTE_VICTOIRE);
     expect((await sons(page)).filter((s) => s === '/audio/partieGagnee.wav')).toHaveLength(1);
+    expect(await page.evaluate(() => window.__jeuMario.journalAudio())).toContain('stop /audio/themeSong.wav');
     await expect(page.locator('.ks-mario__rejouer')).toBeVisible({ timeout: 5000 });
     // le résultat ne change plus, même après la fin théorique du temps
     await page.evaluate(() => window.__jeuMario.executerTours(30000));
-    expect((await etat(page)).textes).toContain('Vous avez gagné !!');
+    expect((await etat(page)).textes).toContain(TEXTE_VICTOIRE);
   });
 });
 
 test.describe('Parties successives, plein écran, audio, fluidité', () => {
   test('16 et 17. plusieurs parties sans rechargement de la page', async ({ page }) => {
     const erreurs = surveillerErreurs(page);
-    await ouvrirJeu(page);
+    await ouvrirJeu(page, 'classique');
     await page.evaluate(() => ((window as unknown as { __marqueur: number }).__marqueur = 42));
     for (let partie = 1; partie <= 5; partie++) {
       if (partie === 1) await commencer(page);
@@ -293,7 +306,7 @@ test.describe('Parties successives, plein écran, audio, fluidité', () => {
   });
 
   test('18. affichage plein écran', async ({ page }) => {
-    await ouvrirJeu(page);
+    await ouvrirJeu(page, 'classique');
     await commencer(page);
     await page.click('#bouton-plein-ecran');
     await expect.poll(() => page.evaluate(() => document.fullscreenElement?.className ?? '')).toContain('ks-mario');
@@ -313,12 +326,14 @@ test.describe('Parties successives, plein écran, audio, fluidité', () => {
     await expect(page.locator('#bouton-plein-ecran')).toHaveText('Plein écran');
   });
 
-  test('13. audio : contexte déverrouillé au clic, 6 sons décodés, sons superposés sans blocage', async ({ page }) => {
-    await ouvrirJeu(page);
+  test('13. audio : contexte déverrouillé au clic, 8 sons décodés, sons superposés sans blocage', async ({ page }) => {
+    await ouvrirJeu(page, 'classique');
     expect((await page.evaluate(() => window.__jeuMario.audio())).etat).toBe('non-deverrouille');
     await commencer(page);
     await expect.poll(async () => (await page.evaluate(() => window.__jeuMario.audio())).etat).toBe('running');
-    expect((await page.evaluate(() => window.__jeuMario.audio())).sonsPrets).toBe(6);
+    await expect
+      .poll(async () => (await page.evaluate(() => window.__jeuMario.audio())).sonsPrets, { timeout: 30_000 })
+      .toBe(8);
     // 10 sauts rapprochés : 10 sons, le jeu continue à sa cadence
     const t0 = (await etat(page)).tours;
     for (let i = 0; i < 10; i++) await page.keyboard.press('Space', { delay: 15 });
@@ -330,8 +345,11 @@ test.describe('Parties successives, plein écran, audio, fluidité', () => {
   test('13. audio : les échantillons joués sont ceux des WAV d’origine et un signal sort réellement', async ({
     page,
   }) => {
-    await ouvrirJeu(page);
+    await ouvrirJeu(page, 'classique');
     await commencer(page);
+    await expect
+      .poll(async () => (await page.evaluate(() => window.__jeuMario.audio())).sonsPrets, { timeout: 30_000 })
+      .toBe(8);
     for (const r of manifeste.ressources.filter((m) => m.type === 'son')) {
       const wav = readFileSync(join(RACINE, 'public/originaux/mario-ahmed-aberkan', r.fichier));
       // lecture indépendante du fichier : format et 2000 premiers échantillons du canal gauche
@@ -352,31 +370,28 @@ test.describe('Parties successives, plein écran, audio, fluidité', () => {
       expect(Math.abs(d.duree - wav.readUInt32LE(i + 4) / (frequence * pas))).toBeLessThan(0.001);
       expect(d.echantillons.map((v) => Math.fround(v))).toEqual(attendus.map((v) => Math.fround(v)));
     }
-    // silence, puis signal non nul juste après un saut
-    expect(await page.evaluate(() => window.__jeuMario.niveauAudio())).toBe(0);
+    // un signal réel sort du graphe audio (musique de thème lancée au 1er tour, puis le saut)
     await page.keyboard.press('Space');
     let crete = 0;
-    for (let k = 0; k < 10 && crete === 0; k++) {
+    for (let k = 0; k < 20 && crete < 0.05; k++) {
       await page.waitForTimeout(25);
       crete = Math.max(crete, await page.evaluate(() => window.__jeuMario.niveauAudio()));
     }
-    test.info().annotations.push({ type: 'mesure', description: `niveau crête après un saut : ${crete.toFixed(3)}` });
+    test.info().annotations.push({ type: 'mesure', description: `niveau crête en jeu : ${crete.toFixed(3)}` });
     expect(crete).toBeGreaterThan(0.05);
   });
 
   test('20b. jeu fluide sur ordinateur : ~60 images/s et 316 tours de logique/s', async ({ page }) => {
-    await ouvrirJeu(page);
+    await ouvrirJeu(page, 'classique');
     await commencer(page);
     await page.keyboard.down('ArrowRight');
     const fps = await mesurerImagesParSeconde(page, 2500);
     await page.keyboard.up('ArrowRight');
     const { toursParSeconde } = await page.evaluate(() => window.__jeuMario.stats());
-    test
-      .info()
-      .annotations.push({
-        type: 'mesure',
-        description: `ordinateur : ${fps.toFixed(1)} images/s, ${toursParSeconde} tours/s`,
-      });
+    test.info().annotations.push({
+      type: 'mesure',
+      description: `ordinateur : ${fps.toFixed(1)} images/s, ${toursParSeconde} tours/s`,
+    });
     expect(fps).toBeGreaterThan(50);
     expect(Math.abs(toursParSeconde - 316.5)).toBeLessThan(8);
   });

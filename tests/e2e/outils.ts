@@ -24,11 +24,46 @@ export interface EtatJeu {
   textes: string[];
 }
 
+export interface EtatModerne {
+  pas: number;
+  t: number;
+  phase: 'intro' | 'jeu' | 'victoire' | 'defaite';
+  cause: 'ennemi' | 'temps' | null;
+  chrono: number;
+  joueur: { x: number; y: number; vx: number; vy: number; auSol: boolean; etat: string; direction: number };
+  camera: { x: number };
+  stats: {
+    pieces: number;
+    ecrases: number;
+    score: number;
+    meilleurCombo: number;
+    tempsFinal: number | null;
+    bonus: number;
+  };
+  ennemis: { type: string; x: number; vivant: boolean }[];
+  piecesRestantes: number;
+  particules: number;
+  touches: string[];
+}
+
+export interface Segment {
+  pas: number;
+  gauche: boolean;
+  droite: boolean;
+  saut: boolean;
+}
+
 interface CrochetTest {
   phase(): string;
+  mode(): 'moderne' | 'classique';
+  choisirMode(m: 'moderne' | 'classique'): void;
   etat(): EtatJeu | null;
+  etatModerne(): EtatModerne | null;
   sons(): string[];
-  audio(): { etat: string; sonsPrets: number; sourcesActives: number };
+  journalAudio(): string[];
+  executerSegments(segments: Segment[]): void;
+  basculerPause(): void;
+  audio(): { etat: string; sonsPrets: number; sourcesActives: number; muet: boolean; musiquePrete: boolean };
   niveauAudio(): number;
   descriptionSon(
     son: string,
@@ -53,16 +88,39 @@ declare global {
 const RACINE = join(import.meta.dirname, '../..');
 export const URL_JEU = '/jeux/mario-ahmed-aberkan';
 
-/** Ouvre la page du jeu en mode test et attend la fin du chargement des ressources. */
-export async function ouvrirJeu(page: Page, chemin = `${URL_JEU}?test`): Promise<void> {
-  await page.goto(chemin);
+/** Ouvre la page du jeu en mode test, dans le mode voulu, et attend la fin du chargement. */
+export async function ouvrirJeu(page: Page, mode: 'moderne' | 'classique' = 'moderne'): Promise<void> {
+  await page.goto(`${URL_JEU}?test`);
   await page.waitForFunction(() => window.__jeuMario?.phase() === 'pret');
+  if ((await page.evaluate(() => window.__jeuMario.mode())) !== mode) {
+    await page.evaluate((m) => window.__jeuMario.choisirMode(m), mode);
+  }
 }
 
 export async function commencer(page: Page): Promise<void> {
   await page.click('.ks-mario__commencer');
   await expect.poll(() => page.evaluate(() => window.__jeuMario.phase())).toBe('en-cours');
-  await expect.poll(() => page.evaluate(() => window.__jeuMario.etat()?.tours ?? 0)).toBeGreaterThan(0);
+  await expect
+    .poll(() => page.evaluate(() => window.__jeuMario.etat()?.tours ?? window.__jeuMario.etatModerne()?.pas ?? 0))
+    .toBeGreaterThan(0);
+}
+
+export const etatModerne = (page: Page): Promise<EtatModerne> => page.evaluate(() => window.__jeuMario.etatModerne()!);
+
+/** Parcours gagnant du mode Moderne (outils/moderne/planifier-victoire.ts). */
+export function parcoursVictoire(): Segment[] {
+  return (
+    JSON.parse(readFileSync(join(RACINE, 'tests/moderne/parcours-victoire.json'), 'utf8')) as { segments: Segment[] }
+  ).segments;
+}
+
+/** Rejoue des segments du mode Moderne de façon déterministe (horloge figée). */
+export async function rejouerSegments(page: Page, segments: Segment[]): Promise<void> {
+  await page.evaluate(() => window.__jeuMario.figerHorloge());
+  await page.click('#bouton-partie');
+  await expect.poll(() => page.evaluate(() => window.__jeuMario.etatModerne()?.pas)).toBe(0);
+  await page.evaluate((s) => window.__jeuMario.executerSegments(s), segments);
+  await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
 }
 
 export const etat = (page: Page): Promise<EtatJeu> => page.evaluate(() => window.__jeuMario.etat()!);
@@ -100,7 +158,7 @@ export async function comparerAuJava(
   page: Page,
   capture: string,
   messageDeFin: boolean,
-): Promise<{ differents: number; compares: number }> {
+): Promise<{ differents: number; compares: number; ecartMax: number; arrondis: number }> {
   const png = readFileSync(join(RACINE, 'tests/e2e/references', capture)).toString('base64');
   return page.evaluate(
     async ([b64, fin]) => {
@@ -121,18 +179,29 @@ export async function comparerAuJava(
       const x2 = c2.getContext('2d')!;
       x2.drawImage(img, 0, 0);
       const web = x2.getImageData(0, 0, 700, 350).data;
+      // Les sprites des personnages ont des bords semi-transparents : Java2D et le canvas
+      // arrondissent différemment le mélange des couleurs (±1 ou 2 niveaux sur 255).
       let differents = 0;
       let compares = 0;
+      let arrondis = 0;
+      let ecartMax = 0;
       for (let y = 0; y < 350; y++) {
         for (let x = 0; x < 700; x++) {
-          if (y < 33) continue; // score et temps
+          if (y < 33) continue; // crédit, score et temps
           if (fin && x >= 110 && x < 640 && y >= 130 && y < 200) continue; // message de fin
           compares++;
           const i = (y * 700 + x) * 4;
-          if (java[i] !== web[i] || java[i + 1] !== web[i + 1] || java[i + 2] !== web[i + 2]) differents++;
+          const e = Math.max(
+            Math.abs(java[i] - web[i]),
+            Math.abs(java[i + 1] - web[i + 1]),
+            Math.abs(java[i + 2] - web[i + 2]),
+          );
+          ecartMax = Math.max(ecartMax, e);
+          if (e > 2) differents++;
+          else if (e > 0) arrondis++;
         }
       }
-      return { differents, compares };
+      return { differents, compares, ecartMax, arrondis };
     },
     [png, messageDeFin] as const,
   );

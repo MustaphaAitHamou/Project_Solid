@@ -2,7 +2,7 @@
  * Mobile (émulation Pixel 7 : écran tactile, densité 2,625) : commandes tactiles, cadrage, fluidité.
  */
 import { expect, test, type Page } from '@playwright/test';
-import { commencer, etat, mesurerImagesParSeconde, ouvrirJeu, surveillerErreurs } from './outils.ts';
+import { commencer, etatModerne, mesurerImagesParSeconde, ouvrirJeu, surveillerErreurs } from './outils.ts';
 
 /** Toucher réel (événements tactiles du navigateur) via le protocole DevTools. */
 async function toucher(page: Page) {
@@ -41,31 +41,30 @@ test('6–8 (tactile). maintenir ▶ fait avancer Mario, ◀ reculer ; ▶ + Sau
   const erreurs = surveillerErreurs(page);
   await ouvrirJeu(page);
   await page.tap('.ks-mario__commencer');
-  await expect.poll(async () => (await etat(page)).tours).toBeGreaterThan(0);
+  await expect.poll(async () => (await etatModerne(page)).phase).toBe('jeu');
   const doigts = await toucher(page);
+  const x0 = (await etatModerne(page)).joueur.x;
 
   await doigts.poser(1, '.ks-mario__tactile-bouton--droite');
   await page.waitForTimeout(400);
-  const avance = (await etat(page)).xPos;
-  expect(avance).toBeGreaterThan(80);
+  expect((await etatModerne(page)).joueur.x).toBeGreaterThan(x0 + 80);
   // second doigt sur « Saut » sans lâcher ▶
   await doigts.poser(2, '.ks-mario__tactile-bouton--espace');
-  await page.waitForTimeout(60);
+  await expect.poll(async () => (await etatModerne(page)).joueur.vy, { timeout: 1000 }).toBeLessThan(0);
   await doigts.lever(2);
-  const e = await etat(page);
-  expect(e.mario.saut).toBe(true);
-  await page.waitForTimeout(300);
-  expect((await etat(page)).xPos).toBeGreaterThan(e.xPos); // continue d'avancer en sautant
+  const e = await etatModerne(page);
+  await page.waitForTimeout(150);
+  expect((await etatModerne(page)).joueur.x).toBeGreaterThan(e.joueur.x); // continue d'avancer en sautant
   await doigts.lever(1);
-  await page.waitForTimeout(100);
-  const arret = (await etat(page)).xPos;
+  await page.waitForTimeout(700); // retombe et s'arrête (légère inertie)
+  const arret = (await etatModerne(page)).joueur.x;
   await page.waitForTimeout(200);
-  expect((await etat(page)).xPos).toBe(arret); // relâché : Mario s'arrête
+  expect((await etatModerne(page)).joueur.x).toBe(arret);
 
   await doigts.poser(3, '.ks-mario__tactile-bouton--gauche');
   await page.waitForTimeout(300);
   await doigts.lever(3);
-  expect((await etat(page)).xPos).toBeLessThan(arret);
+  expect((await etatModerne(page)).joueur.x).toBeLessThan(arret);
   expect(erreurs).toEqual([]);
 });
 
@@ -98,7 +97,7 @@ test('cadrage paysage : en-tête masqué, jeu sur toute la hauteur, sans défile
   await expect(page.locator('.ks-mario__tactile')).toBeVisible();
 });
 
-test('20c. fluidité sur mobile : ~60 images/s et 316 tours/s (jeu et accueil 3D)', async ({ page }) => {
+test('20c. fluidité sur mobile : ~60 images/s et 120 pas/s (jeu) et accueil 3D', async ({ page }) => {
   await ouvrirJeu(page);
   await page.tap('.ks-mario__commencer');
   await page.waitForTimeout(500);
@@ -109,10 +108,10 @@ test('20c. fluidité sur mobile : ~60 images/s et 316 tours/s (jeu et accueil 3D
   const fps3d = await mesurerImagesParSeconde(page, 2500);
   test.info().annotations.push({
     type: 'mesure',
-    description: `mobile : jeu ${fps.toFixed(1)} images/s, ${toursParSeconde} tours/s ; accueil 3D ${fps3d.toFixed(1)} images/s`,
+    description: `mobile : jeu ${fps.toFixed(1)} images/s, ${toursParSeconde} pas/s ; accueil 3D ${fps3d.toFixed(1)} images/s`,
   });
   expect(fps).toBeGreaterThan(50);
-  expect(Math.abs(toursParSeconde - 316.5)).toBeLessThan(8);
+  expect(Math.abs(toursParSeconde - 120)).toBeLessThan(5);
   expect(fps3d).toBeGreaterThan(40);
   expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(0);
 });

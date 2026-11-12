@@ -1,14 +1,24 @@
 import type { Touche } from '../engine/index.ts';
 
+/** Commandes hors du jeu lui-même : pause et coupure du son. */
+export type Commande = 'PAUSE' | 'SON';
+
 /** Destinataire des entrées (implémenté par le jeu). L'horodatage suit performance.now(). */
 export interface CibleEntrees {
   enfoncer(touche: Touche, horodatage: number): void;
   relacher(touche: Touche, horodatage: number): void;
   toutRelacher(): void;
+  commande(c: Commande): void;
 }
 
-/** Commandes d'origine : flèche droite, flèche gauche, barre d'espace. */
-function toucheDe(e: KeyboardEvent): Touche | null {
+/**
+ * Profil « classique » : uniquement les touches de Clavier.java (flèches, Espace).
+ * Profil « moderne » : en plus Q/D et Z (AZERTY ; A/D et W en QWERTY), ↑ pour sauter.
+ * Les deux : Échap ou P pour la pause, M pour couper le son.
+ */
+export type ProfilClavier = 'classique' | 'moderne';
+
+function commandeDe(e: KeyboardEvent, profil: ProfilClavier): Touche | Commande | null {
   switch (e.code) {
     case 'ArrowRight':
       return 'DROITE';
@@ -16,6 +26,22 @@ function toucheDe(e: KeyboardEvent): Touche | null {
       return 'GAUCHE';
     case 'Space':
       return 'ESPACE';
+    case 'Escape':
+    case 'KeyP':
+      return 'PAUSE';
+    case 'KeyM':
+      return 'SON';
+  }
+  if (profil === 'moderne') {
+    switch (e.code) {
+      case 'KeyD':
+        return 'DROITE';
+      case 'KeyA': // touche Q d'un clavier AZERTY
+        return 'GAUCHE';
+      case 'ArrowUp':
+      case 'KeyW': // touche Z d'un clavier AZERTY
+        return 'ESPACE';
+    }
   }
   // Navigateurs anciens ou claviers virtuels sans `code`
   switch (e.key) {
@@ -45,11 +71,13 @@ function estEditable(cible: EventTarget | null): boolean {
 export class EntreesClavier {
   private readonly cible: CibleEntrees;
   private readonly estActif: () => boolean;
+  private readonly profil: () => ProfilClavier;
   private readonly enfoncees = new Set<Touche>();
 
-  constructor(cible: CibleEntrees, estActif: () => boolean) {
+  constructor(cible: CibleEntrees, estActif: () => boolean, profil: () => ProfilClavier = () => 'classique') {
     this.cible = cible;
     this.estActif = estActif;
+    this.profil = profil;
   }
 
   attacher(): void {
@@ -68,29 +96,37 @@ export class EntreesClavier {
   }
 
   private readonly surAppui = (e: KeyboardEvent): void => {
-    const touche = toucheDe(e);
-    if (e.ctrlKey || e.metaKey || e.altKey || estEditable(e.target) || !this.estActif()) return;
-    if (!touche) {
-      // ↑ et ↓ ne servent pas au jeu mais ne doivent pas faire défiler la page pendant une partie
+    if (e.ctrlKey || e.metaKey || e.altKey || estEditable(e.target)) return;
+    const c = commandeDe(e, this.profil());
+    if (c === 'PAUSE' || c === 'SON') {
+      if (e.repeat) return;
+      // la pause doit rester accessible même quand le jeu est en pause
+      this.cible.commande(c);
+      if (this.estActif() || c === 'PAUSE') e.preventDefault();
+      return;
+    }
+    if (!this.estActif()) return;
+    if (!c) {
+      // ↑ et ↓ ne doivent pas faire défiler la page pendant une partie
       if (e.code === 'ArrowUp' || e.code === 'ArrowDown') e.preventDefault();
       return;
     }
     e.preventDefault(); // pas de défilement, pas d'activation du bouton qui a le focus
     e.stopPropagation();
-    if (e.repeat || this.enfoncees.has(touche)) return;
-    this.enfoncees.add(touche);
-    this.cible.enfoncer(touche, e.timeStamp);
+    if (e.repeat || this.enfoncees.has(c)) return;
+    this.enfoncees.add(c);
+    this.cible.enfoncer(c, e.timeStamp);
   };
 
   private readonly surRelachement = (e: KeyboardEvent): void => {
-    const touche = toucheDe(e);
-    if (!touche) return;
+    const c = commandeDe(e, this.profil());
+    if (!c || c === 'PAUSE' || c === 'SON') return;
     if (this.estActif()) {
       e.preventDefault();
       e.stopPropagation();
     }
-    if (!this.enfoncees.delete(touche)) return;
-    this.cible.relacher(touche, e.timeStamp);
+    if (!this.enfoncees.delete(c)) return;
+    this.cible.relacher(c, e.timeStamp);
   };
 
   private readonly surPerteFocus = (): void => {
@@ -101,6 +137,54 @@ export class EntreesClavier {
   private readonly surVisibilite = (): void => {
     if (document.hidden) this.surPerteFocus();
   };
+}
+
+/**
+ * Manette (Gamepad API, disposition standard) : stick gauche ou croix pour se déplacer,
+ * A/B ou haut de la croix pour sauter, Start pour la pause. Lue à chaque image.
+ */
+export class Manette {
+  private readonly cible: CibleEntrees;
+  private precedent = { gauche: false, droite: false, saut: false, pause: false };
+  private connectee = false;
+  private readonly surConnexion = (): void => {
+    this.connectee = true;
+  };
+
+  constructor(cible: CibleEntrees) {
+    this.cible = cible;
+    window.addEventListener('gamepadconnected', this.surConnexion);
+  }
+
+  detacher(): void {
+    window.removeEventListener('gamepadconnected', this.surConnexion);
+  }
+
+  lire(actif: boolean): void {
+    if (!this.connectee || typeof navigator.getGamepads !== 'function') return;
+    const etat = { gauche: false, droite: false, saut: false, pause: false };
+    for (const pad of navigator.getGamepads()) {
+      if (!pad) continue;
+      const b = (i: number): boolean => Boolean(pad.buttons[i]?.pressed);
+      const ax = pad.axes[0] ?? 0;
+      etat.gauche ||= ax < -0.45 || b(14);
+      etat.droite ||= ax > 0.45 || b(15);
+      etat.saut ||= b(0) || b(1) || b(12);
+      etat.pause ||= b(9);
+    }
+    const t = performance.now();
+    if (etat.pause && !this.precedent.pause) this.cible.commande('PAUSE');
+    if (actif) {
+      const bascule = (cle: 'gauche' | 'droite' | 'saut', touche: Touche): void => {
+        if (etat[cle] && !this.precedent[cle]) this.cible.enfoncer(touche, t);
+        else if (!etat[cle] && this.precedent[cle]) this.cible.relacher(touche, t);
+      };
+      bascule('gauche', 'GAUCHE');
+      bascule('droite', 'DROITE');
+      bascule('saut', 'ESPACE');
+    }
+    this.precedent = etat;
+  }
 }
 
 /**

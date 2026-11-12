@@ -6,7 +6,7 @@
     <title>Mario Ahmed Aberkan — KABYLE SOLIDE</title>
     <meta
       name="description"
-      content="Jouez à Mario Ahmed Aberkan dans votre navigateur : le jeu Java d’origine porté à l’identique."
+      content="Jouez à Mario Ahmed Aberkan (Super Ahmed Averkan Bros) dans votre navigateur : version moderne ou version classique fidèle au jeu Java."
     />
     <meta name="theme-color" content="#0a0f1e" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
@@ -23,14 +23,20 @@
       </div>
       <div class="ks-page-jeu__actions">
         <button type="button" class="ks-bouton ks-bouton--principal" id="bouton-partie" disabled>Commencer</button>
+        <div class="ks-bascule" role="group" aria-label="Version du jeu">
+          <button type="button" class="ks-bascule__option" data-mode="moderne" aria-pressed="true">Moderne</button>
+          <button type="button" class="ks-bascule__option" data-mode="classique" aria-pressed="false">Classique</button>
+        </div>
         <button type="button" class="ks-bouton" id="bouton-plein-ecran" aria-pressed="false" disabled>
           Plein écran
         </button>
         <a class="ks-bouton ks-bouton--discret" href="/">Retour à l’accueil</a>
       </div>
       <p class="ks-page-jeu__aide">
-        <kbd>←</kbd> <kbd>→</kbd> se déplacer · <kbd>Espace</kbd> sauter. Ramassez les 10 pièces et atteignez l’arrivée
-        avant la fin du temps.
+        Ramassez les <strong>10 pièces</strong> et atteignez le drapeau avant la fin du temps. Écrasez les ennemis en
+        leur sautant dessus. <strong>Moderne</strong> : <kbd>←</kbd> <kbd>→</kbd> ou <kbd>Q</kbd> <kbd>D</kbd>,
+        <kbd>Espace</kbd>/<kbd>↑</kbd>/<kbd>Z</kbd> pour sauter (maintenir = plus haut), <kbd>Échap</kbd> pause,
+        <kbd>M</kbd> son, manette acceptée. <strong>Classique</strong> : le jeu Java d’origine, à l’identique.
       </p>
     </main>
     <!-- @inclure pied -->

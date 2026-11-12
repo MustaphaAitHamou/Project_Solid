@@ -10,7 +10,7 @@ export interface OptionsPartie {
   cadences?: Partial<CadencesHorloge>;
 }
 
-const AUDIO_MUET: SortieAudio = { playSound() {} };
+const AUDIO_MUET: SortieAudio = { playSound() {}, stopSound() {} };
 
 type Primitives = Record<string, string | number | boolean | null | undefined>;
 
@@ -71,7 +71,7 @@ export class Partie {
   constructor(options: OptionsPartie = {}) {
     this.corrections = { ...CORRECTIONS_PAR_DEFAUT, ...options.corrections };
     this.cadences = { ...CADENCES_MESUREES, ...options.cadences };
-    this.scene = new Scene(options.audio ?? AUDIO_MUET);
+    this.scene = new Scene(options.audio ?? AUDIO_MUET, this.corrections);
     this.clavier = new Clavier(this.scene, this.corrections);
     this.prochainRafraichissementUs = this.cadences.periodeRafraichissementUs;
     this.prochainEnnemisUs = this.cadences.delaiInitialEnnemisUs;
